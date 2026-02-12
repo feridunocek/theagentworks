@@ -129,8 +129,8 @@ export const dictionaries: Record<string, Dictionary> = {
         },
         hero: {
             badge: "Yapay Zeka ile İş Gücü Devrimi",
-            title_prefix: "İşletmenizin Yeni",
-            title_highlight: "Dijital Omurgası",
+            title_prefix: "Ekibinizi büyütmeyin,",
+            title_highlight: "dijitalleştirin.",
             subtitle: "Rutin operasyonlardan kurtulun, verimliliği maksimize edin. AgentWorks, işletmeniz için 7/24 çalışan otonom dijital departmanlar kurar.",
             cta_primary: "Hizmetler",
             cta_secondary: "Nasıl Çalışır?"
