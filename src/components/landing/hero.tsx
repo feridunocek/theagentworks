@@ -9,7 +9,7 @@ import { useI18n } from "@/components/providers/i18n-provider"; // Import I18n
 export function Hero() {
     const { dict } = useI18n(); // Use hook
     return (
-        <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-12 md:pt-20">
+        <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-28 md:pt-20">
             {/* Background Ambience */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute top-[-20%] left-[-10%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-[var(--color-neon-purple)]/20 rounded-full blur-[80px] md:blur-[120px]" />
@@ -23,7 +23,7 @@ export function Hero() {
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="space-y-6 md:space-y-8 relative z-20 max-w-[600px] mx-auto lg:mx-0 text-center lg:text-left pt-10 lg:pt-0"
+                    className="space-y-6 md:space-y-8 relative z-20 max-w-[600px] mx-auto lg:mx-0 text-center lg:text-left pt-6 lg:pt-0"
                 >
                     <div className="flex items-center justify-center lg:justify-start gap-2">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[var(--color-neon-cyan)]/30 bg-[var(--color-neon-cyan)]/10 text-[var(--color-neon-cyan)] text-xs font-medium tracking-wide">
@@ -40,15 +40,15 @@ export function Hero() {
                         {dict.hero.subtitle}
                     </p>
 
-                    <div className="flex flex-col sm:flex-row gap-4 pt-2 justify-center lg:justify-start">
-                        <a href="#birimler" onClick={(e) => { e.preventDefault(); document.getElementById('birimler')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                            <NeonButton variant="primary" glow className="w-full sm:w-auto justify-center">
+                    <div className="flex flex-row flex-wrap gap-4 pt-4 justify-center lg:justify-start">
+                        <a href="#birimler" onClick={(e) => { e.preventDefault(); document.getElementById('birimler')?.scrollIntoView({ behavior: 'smooth' }); }} className="flex-1 sm:flex-none max-w-[50%] sm:max-w-none">
+                            <NeonButton variant="primary" glow className="w-full justify-center px-4">
                                 {dict.hero.cta_primary}
                                 <ArrowRight className="w-4 h-4 ml-2" />
                             </NeonButton>
                         </a>
-                        <a href="#nasil-calisir" onClick={(e) => { e.preventDefault(); document.getElementById('nasil-calisir')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                            <NeonButton variant="outline" className="w-full sm:w-auto justify-center">
+                        <a href="#nasil-calisir" onClick={(e) => { e.preventDefault(); document.getElementById('nasil-calisir')?.scrollIntoView({ behavior: 'smooth' }); }} className="flex-1 sm:flex-none max-w-[50%] sm:max-w-none">
+                            <NeonButton variant="outline" className="w-full justify-center px-4">
                                 {dict.hero.cta_secondary}
                             </NeonButton>
                         </a>

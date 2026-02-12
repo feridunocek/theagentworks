@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { NeonButton } from "../ui/neon-button";
 import { LanguageSelector } from "./language-selector";
+import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useI18n } from "@/components/providers/i18n-provider";
 import { cn } from "@/lib/utils";
 
@@ -29,13 +31,15 @@ export function Header() {
         }
     };
 
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
     return (
         <header
             className={cn(
                 "fixed left-0 right-0 z-50 flex justify-center transition-all duration-500",
                 scrolled
                     ? "top-0 py-3 bg-black/60 backdrop-blur-xl border-b border-white/5 shadow-2xl"
-                    : "top-6 py-0 bg-transparent pointer-events-none"
+                    : "top-4 md:top-6 py-0 bg-transparent pointer-events-none"
             )}
         >
             <div className="w-full max-w-7xl flex items-center justify-between relative px-4 md:px-6">
@@ -45,7 +49,7 @@ export function Header() {
                     <div
                         className={cn(
                             "relative transition-all duration-500 ease-in-out",
-                            scrolled ? "w-36 h-[60px]" : "w-48 h-[72px]"
+                            scrolled ? "w-28 md:w-36 h-[40px] md:h-[60px]" : "w-32 md:w-48 h-[48px] md:h-[72px]"
                         )}
                     >
                         <Image
@@ -58,7 +62,7 @@ export function Header() {
                     </div>
                 </a>
 
-                {/* Center: Navigation Pill */}
+                {/* Center: Navigation Pill (Desktop) */}
                 <nav
                     className={cn(
                         "hidden md:flex items-center gap-8 px-8 py-3 rounded-full transition-all duration-500 pointer-events-auto",
@@ -89,18 +93,61 @@ export function Header() {
                     </a>
                 </nav>
 
-                {/* Right: Language & CTA */}
-                <div className="relative z-10 shrink-0 pointer-events-auto flex items-center gap-4">
+                {/* Right: Language, CTA & Hamburger */}
+                <div className="relative z-10 shrink-0 pointer-events-auto flex items-center gap-3 md:gap-4">
                     <LanguageSelector />
 
-                    <a href="#iletisim" onClick={(e) => scrollToSection(e, 'iletisim')}>
+                    {/* Desktop CTA */}
+                    <a href="#iletisim" onClick={(e) => scrollToSection(e, 'iletisim')} className="hidden md:block">
                         <NeonButton variant="primary" glow className="h-10 px-6 text-sm flex items-center justify-center">
                             {dict.nav.cta}
                         </NeonButton>
                     </a>
+
+                    {/* Mobile Hamburger */}
+                    <button
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        className="md:hidden p-2 text-white hover:text-[var(--color-neon-cyan)] transition-colors"
+                    >
+                        {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
                 </div>
 
             </div>
+
+            {/* Mobile Menu Overlay */}
+            <AnimatePresence>
+                {mobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/10 p-6 md:hidden pointer-events-auto flex flex-col gap-6 shadow-2xl"
+                    >
+                        <a href="#faydalar" onClick={(e) => { scrollToSection(e, 'faydalar'); setMobileMenuOpen(false); }} className="text-lg font-medium text-white/90 hover:text-[var(--color-neon-cyan)]">
+                            {dict.nav.features}
+                        </a>
+                        <a href="#hesaplayici" onClick={(e) => { scrollToSection(e, 'hesaplayici'); setMobileMenuOpen(false); }} className="text-lg font-medium text-white/90 hover:text-[var(--color-neon-cyan)]">
+                            {dict.nav.efficiency}
+                        </a>
+                        <a href="#birimler" onClick={(e) => { scrollToSection(e, 'birimler'); setMobileMenuOpen(false); }} className="text-lg font-medium text-white/90 hover:text-[var(--color-neon-cyan)]">
+                            {dict.nav.services}
+                        </a>
+                        <a href="#nasil-calisir" onClick={(e) => { scrollToSection(e, 'nasil-calisir'); setMobileMenuOpen(false); }} className="text-lg font-medium text-white/90 hover:text-[var(--color-neon-cyan)]">
+                            {dict.nav.roadmap}
+                        </a>
+                        <a href="#iletisim" onClick={(e) => { scrollToSection(e, 'iletisim'); setMobileMenuOpen(false); }} className="text-lg font-medium text-white/90 hover:text-[var(--color-neon-cyan)]">
+                            {dict.nav.contact}
+                        </a>
+                        <a href="#iletisim" onClick={(e) => { scrollToSection(e, 'iletisim'); setMobileMenuOpen(false); }}>
+                            <NeonButton variant="primary" glow className="w-full justify-center">
+                                {dict.nav.cta}
+                            </NeonButton>
+                        </a>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </header>
     );
 }
