@@ -21,10 +21,36 @@ export function LeadForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        setIsSubmitting(false);
-        setIsSubmitted(true);
+
+        try {
+            const formData = new FormData(e.target as HTMLFormElement);
+            const data = {
+                name: formData.get("name"),
+                email: formData.get("email"),
+                phone: formData.get("phone"),
+                department: formData.get("department"),
+                message: formData.get("message"),
+            };
+
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                setIsSubmitted(true);
+            } else {
+                alert("Bir hata oluştu. Lütfen tekrar deneyiniz.");
+            }
+        } catch (error) {
+            console.error("Form gönderim hatası:", error);
+            alert("Bir hata oluştu. Lütfen tekrar deneyiniz.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -119,6 +145,7 @@ export function LeadForm() {
                                             <label htmlFor="name" className="text-sm font-medium text-gray-400 ml-1">{dict.lead_form.form.name_label}</label>
                                             <input
                                                 id="name"
+                                                name="name"
                                                 type="text"
                                                 required
                                                 placeholder={dict.lead_form.form.name_placeholder}
@@ -131,6 +158,7 @@ export function LeadForm() {
                                                 <label htmlFor="email" className="text-sm font-medium text-gray-400 ml-1">{dict.lead_form.form.email_label}</label>
                                                 <input
                                                     id="email"
+                                                    name="email"
                                                     type="email"
                                                     required
                                                     placeholder={dict.lead_form.form.email_placeholder}
@@ -141,6 +169,7 @@ export function LeadForm() {
                                                 <label htmlFor="phone" className="text-sm font-medium text-gray-400 ml-1">{dict.lead_form.form.phone_label}</label>
                                                 <input
                                                     id="phone"
+                                                    name="phone"
                                                     type="tel"
                                                     placeholder={dict.lead_form.form.phone_placeholder}
                                                     className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-base text-white placeholder:text-gray-600 focus:outline-hidden focus:border-[var(--color-neon-cyan)]/50 focus:ring-1 focus:ring-[var(--color-neon-cyan)]/50 transition-all font-sans"
@@ -153,6 +182,7 @@ export function LeadForm() {
                                             <div className="relative">
                                                 <select
                                                     id="department"
+                                                    name="department"
                                                     className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-base text-white focus:outline-hidden focus:border-[var(--color-neon-cyan)]/50 focus:ring-1 focus:ring-[var(--color-neon-cyan)]/50 transition-all appearance-none cursor-pointer font-sans"
                                                     defaultValue=""
                                                 >
@@ -173,6 +203,7 @@ export function LeadForm() {
                                             <label htmlFor="message" className="text-sm font-medium text-gray-400 ml-1">{dict.lead_form.form.message_label}</label>
                                             <textarea
                                                 id="message"
+                                                name="message"
                                                 rows={3}
                                                 placeholder={dict.lead_form.form.message_placeholder}
                                                 className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-base text-white placeholder:text-gray-600 focus:outline-hidden focus:border-[var(--color-neon-cyan)]/50 focus:ring-1 focus:ring-[var(--color-neon-cyan)]/50 transition-all resize-none font-sans"
