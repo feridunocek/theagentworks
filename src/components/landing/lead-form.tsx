@@ -12,6 +12,7 @@ import {
     Loader2
 } from "lucide-react";
 import { useI18n } from "@/components/providers/i18n-provider";
+import { sendGAEvent } from '@next/third-parties/google';
 
 export function LeadForm() {
     const { dict } = useI18n();
@@ -40,7 +41,11 @@ export function LeadForm() {
                 body: JSON.stringify(data),
             });
 
+            // ... inside LeadForm component ...
+
             if (response.ok) {
+                // Track lead generation event
+                sendGAEvent('event', 'generate_lead', { currency: 'USD', value: 10 });
                 setIsSubmitted(true);
             } else {
                 alert("Bir hata oluştu. Lütfen tekrar deneyiniz.");

@@ -3,6 +3,7 @@ import { Inter, Sora } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { I18nProvider } from "@/components/providers/i18n-provider";
 import "./globals.css";
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -20,6 +21,10 @@ export const metadata: Metadata = {
   title: "AgentWorks | Otonom Dijital İş Gücü",
   description: "İş yükünüzü azaltmıyoruz, onu otonom hale getiriyoruz. AgentWorks ile işletmenizin dijital dönüşümünü başlatın.",
   keywords: ["AI Agent", "Digital Workforce", "Otomasyon", "Yapay Zeka", "AgentWorks"],
+  icons: {
+    icon: "/favicon.png",
+    apple: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
@@ -36,6 +41,7 @@ export default function RootLayout({
           <Header />
           {children}
         </I18nProvider>
+        <GoogleAnalytics gaId="G-RYVV2Y68HE" />
       </body>
     </html>
   );
