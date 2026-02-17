@@ -3,6 +3,7 @@ import { ValueGap } from "@/components/landing/value-gap";
 import { DigitalWorkforce } from "@/components/landing/digital-workforce";
 import { TransformationScenarios } from "@/components/landing/transformation-scenarios";
 import { Methodology } from "@/components/landing/methodology";
+import Solutions from "@/components/sections/Solutions";
 import { LeadForm } from "@/components/landing/lead-form";
 import { Footer } from "@/components/layout/footer";
 import { FutureOperations } from "@/components/landing/future-operations";
@@ -14,6 +15,7 @@ export default function Home() {
       <FutureOperations />
       <ValueGap />
       <DigitalWorkforce />
+      <Solutions />
       <TransformationScenarios />
       <Methodology />
       <LeadForm />
