@@ -72,7 +72,7 @@ export function ValueGap() {
                                     max={200}
                                     step={1}
                                     valueDisplay={weeklyHours.toString()}
-                                    unit="Saat / Hafta"
+                                    unit={dict.value_gap.calculator.unit_hours_weekly}
                                     onChange={(e) => setWeeklyHours(Number(e.target.value))}
                                 />
 
@@ -114,7 +114,7 @@ export function ValueGap() {
                                         </div>
                                         <div className="text-3xl font-bold text-white font-mono tracking-tight">
                                             {results?.recoveredHours?.toLocaleString('tr-TR') ?? 0}
-                                            <span className="text-sm font-normal text-gray-400 ml-1">saat</span>
+                                            <span className="text-sm font-normal text-gray-400 ml-1">{dict.value_gap.calculator.unit_hours}</span>
                                         </div>
                                     </div>
 

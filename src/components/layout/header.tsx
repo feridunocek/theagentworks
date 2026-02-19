@@ -83,6 +83,10 @@ export function Header() {
                         {dict.nav.services}
                         <span className="absolute -bottom-1 left-0 w-0 h-px bg-[var(--color-neon-cyan)] transition-all group-hover:w-full" />
                     </a>
+                    <a href="#solutions" onClick={(e) => scrollToSection(e, 'solutions')} className="text-sm font-medium text-white/80 hover:text-white transition-colors relative group">
+                        {dict.nav.systems}
+                        <span className="absolute -bottom-1 left-0 w-0 h-px bg-[var(--color-neon-cyan)] transition-all group-hover:w-full" />
+                    </a>
                     <a href="#nasil-calisir" onClick={(e) => scrollToSection(e, 'nasil-calisir')} className="text-sm font-medium text-white/80 hover:text-white transition-colors relative group">
                         {dict.nav.roadmap}
                         <span className="absolute -bottom-1 left-0 w-0 h-px bg-[var(--color-neon-cyan)] transition-all group-hover:w-full" />
@@ -133,6 +137,9 @@ export function Header() {
                         </a>
                         <a href="#birimler" onClick={(e) => { scrollToSection(e, 'birimler'); setMobileMenuOpen(false); }} className="text-lg font-medium text-white/90 hover:text-[var(--color-neon-cyan)]">
                             {dict.nav.services}
+                        </a>
+                        <a href="#solutions" onClick={(e) => { scrollToSection(e, 'solutions'); setMobileMenuOpen(false); }} className="text-lg font-medium text-white/90 hover:text-[var(--color-neon-cyan)]">
+                            {dict.nav.systems}
                         </a>
                         <a href="#nasil-calisir" onClick={(e) => { scrollToSection(e, 'nasil-calisir'); setMobileMenuOpen(false); }} className="text-lg font-medium text-white/90 hover:text-[var(--color-neon-cyan)]">
                             {dict.nav.roadmap}

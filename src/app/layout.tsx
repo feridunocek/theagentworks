@@ -18,12 +18,29 @@ const sora = Sora({
 });
 
 export const metadata: Metadata = {
-  title: "AgentWorks | Otonom Dijital İş Gücü",
-  description: "İş yükünüzü azaltmıyoruz, onu otonom hale getiriyoruz. AgentWorks ile işletmenizin dijital dönüşümünü başlatın.",
-  keywords: ["AI Agent", "Digital Workforce", "Otomasyon", "Yapay Zeka", "AgentWorks"],
+  title: "The Agent Works | İş Yükünüzü Hafifleten Dijital Çalışanlar",
+  description: "İşletmenizin verimliliğini, size özel kurgulanan dijital çalışanlarla artırıyoruz. Karmaşadan uzak, sonuç odaklı yapay zeka çözümleri.",
+  openGraph: {
+    type: "website",
+    url: "https://www.theagent-works.com/",
+    title: "İş Yükünüzü Hafifleten Dijital Çalışanlarla Tanışın",
+    description: "Verimliliği artırmak ve iş süreçlerini akıcı hale getirmek için tasarlanan yeni nesil iş gücü.",
+    images: [{
+      url: "https://www.theagent-works.com/share-image.webp",
+      width: 1200,
+      height: 630,
+      alt: "The Agent Works"
+    }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Agent Works | Geleceğin İş Gücü",
+    images: ["https://www.theagent-works.com/share-image.webp"],
+  },
   icons: {
     icon: "/favicon.png",
-    apple: "/favicon.png",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 };
 

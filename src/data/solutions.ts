@@ -11,108 +11,147 @@ import {
 
 export interface Solution {
     id: string;
-    title: string;
+    name: string;
     description: string;
-    details: string; // Used for main intro text
-    workflowDetails: string; // Used for "İŞ AKIŞI DETAYLARI" box
-    benefits: string[];
-    tools: string[];
-    icon: any;
-    isSpecial?: boolean;
-    gains: {
+    details: string;
+    roiData: {
         efficiency: string;
         timeSaving: string;
     };
+    tools: string[];
+    benefits: string[];
+    icon: any;
+    isSpecial?: boolean;
 }
 
 export const solutions: Solution[] = [
     {
         id: "ai-voice",
-        title: "7/24 Sesli AI Asistan",
+        name: "7/24 Sesli AI Asistan",
         icon: PhoneCall,
-        description: "Telefonlarınıza bakan, randevu alan ve satış yapan yapay zeka sekreter.",
-        details: "Müşterileriniz aradığında meşgule düşmez. AI asistanınız telefonu doğal bir dille açar, hizmetlerinizi anlatır ve randevuları doğrudan takviminize işler. SEO: İşletmeler için sesli yapay zeka ve otonom santral.",
-        workflowDetails: "Müşterileriniz aradığında meşgule düşmez. AI asistanınız telefonu doğal bir dille açar, hizmetlerinizi anlatır ve randevuları doğrudan takviminize işler. SEO: İşletmeler için sesli yapay zeka ve otonom santral.",
-        gains: { efficiency: "%95 Yanıt", timeSaving: "Günde 4 Saat" },
+        description:
+            "Telefon çağrılarınızı yanıtlayan, randevu alan ve satış kapatan yapay zeka santral çözümü.",
+        details:
+            "Müşteriniz aradığında meşgul sinyali almaz. Yapay zeka telefon asistanınız doğal Türkçeyle sohbet eder, hizmetlerinizi detaylı anlatır ve randevuları Google Calendar veya kendi takviminize otomatik işler. Küçük işletmelerden büyük şirketlere kadar sekreter maliyetini sıfıra indiren, eş zamanlı 100+ çağrıyı karşılayan akıllı santral sistemi.",
+        roiData: { efficiency: "%95 Yanıt Oranı", timeSaving: "Günde 4 Saat" },
         tools: ["Vapi", "ElevenLabs", "n8n", "GPT-4o"],
-        benefits: ["Kaçan çağrılara son", "Eş zamanlı 100+ görüşme", "Düşük maliyetli sekreterlik"]
+        benefits: [
+            "Kaçan çağrı ve kayıp müşteriye son verin",
+            "Eş zamanlı 100+ görüşmeyi tek sistemle karşılayın",
+            "Tam zamanlı sekreter maliyetinin %10'a sahip olun"
+        ]
     },
     {
         id: "ai-photo",
-        title: "AI Ürün Fotoğraf Stüdyosu",
+        name: "AI Ürün Fotoğraf Stüdyosu",
         icon: Camera,
-        description: "Ürün fotoğraflarınızı saniyeler içinde profesyonel stüdyo çekimine dönüştürün.",
-        details: "E-ticaret görsellerinizi alır, arka planı temizler ve ürününüzü en şık dekorların içine yerleştirir. Işık ve gölgeyi otomatik ayarlar. SEO: Yapay zeka ürün fotoğrafçılığı ve görsel otomasyonu.",
-        workflowDetails: "E-ticaret görsellerinizi alır, arka planı temizler ve ürününüzü en şık dekorların içine yerleştirir. Işık ve gölgeyi otomatik ayarlar. SEO: Yapay zeka ürün fotoğrafçılığı ve görsel otomasyonu.",
-        gains: { efficiency: "%90 Tasarruf", timeSaving: "Haftalık 15 Saat" },
+        description:
+            "Akıllı telefonla çektiğiniz ürün fotoğraflarını saniyeler içinde profesyonel e-ticaret görseliyle dönüştürün.",
+        details:
+            "E-ticaret ve sosyal medya için stüdyo kalitesinde ürün fotoğrafı artık dakikalar içinde hazır. Yüklediğiniz ham görselin arka planını otomatik temizler, ürününüzü trend dekor ve sahnelere yerleştirir, ışık ile gölgeyi yapay zeka ile optimize eder. Trendyol, Hepsiburada ve Amazon listeleri için dönüşüm oranını artıran görseller üretin.",
+        roiData: { efficiency: "%90 Maliyet Tasarrufu", timeSaving: "Haftalık 15 Saat" },
         tools: ["Midjourney API", "ComfyUI", "Cloudinary"],
-        benefits: ["Stüdyo masrafına son", "Sınırsız varyasyon", "Hızlı kampanya hazırlığı"]
+        benefits: [
+            "Stüdyo kiralama ve fotoğrafçı masrafını sıfırlayın",
+            "Sınırsız renk, dekor ve sahne varyasyonu üretin",
+            "Kampanya görsellerini saatler değil dakikalar içinde hazırlayın"
+        ]
     },
     {
         id: "sales-bot",
-        title: "Satış Kapatan Akıllı Chatbot",
+        name: "Satış Kapatan Akıllı Chatbot",
         icon: MessageSquare,
-        description: "Sadece soru cevaplamaz, ürün önerir ve WhatsApp'ta satışı bitirir.",
-        details: "Ürün kataloğunuza tamamen hakimdir. Müşterinin ihtiyacını analiz eder, doğru ürünü önerir ve ödeme linkini göndererek süreci tamamlar. SEO: Satış odaklı chatbot ve conversational AI.",
-        workflowDetails: "Ürün kataloğunuza tamamen hakimdir. Müşterinin ihtiyacını analiz eder, doğru ürünü önerir ve ödeme linkini göndererek süreci tamamlar. SEO: Satış odaklı chatbot ve conversational AI.",
-        gains: { efficiency: "%35 Dönüşüm", timeSaving: "Haftalık 30 Saat" },
+        description:
+            "WhatsApp ve web sitenizde 7/24 ürün öneren, soruları yanıtlayan ve ödeme linkiyle satışı kapatan AI chatbot.",
+        details:
+            "Ürün kataloğunuza tam hakimiyet sağlayan AI satış botu, müşteri ihtiyacını analiz ederek kişiselleştirilmiş ürün önerir ve ödeme bağlantısını göndererek süreci otomatik tamamlar. WhatsApp Business API entegrasyonuyla müşteri başına ortalama %35 daha yüksek dönüşüm oranı elde edin. İnsan temsilcisi olmadan günde 500+ satış görüşmesi yönetin.",
+        roiData: { efficiency: "%35 Dönüşüm Artışı", timeSaving: "Haftalık 30 Saat" },
         tools: ["n8n", "WhatsApp API", "Pinecone", "GPT-4o"],
-        benefits: ["7/24 otonom satış", "Kişisel alışveriş asistanı", "Anında destek ve çözüm"]
+        benefits: [
+            "7/24 satış yapan, hiç uyumayan dijital satış temsilcisi",
+            "Her müşteriye özel ürün önerisiyle sepet değerini artırın",
+            "Anlık destek ve çözümle müşteri memnuniyetini zirveye taşıyın"
+        ]
     },
     {
         id: "youtube-fab",
-        title: "YouTube İçerik Fabrikası",
+        name: "YouTube İçerik Fabrikası",
         icon: Youtube,
-        description: "Uzun videolarınızı viral Shorts, Reels ve Blog yazılarına dönüştürün.",
-        details: "YouTube videonuzdan en can alıcı noktaları bulur, transkript çıkarır ve bunlardan onlarca kısa video ve SEO uyumlu blog içeriği üretir. SEO: Video repurposing ve otomatik içerik yönetimi.",
-        workflowDetails: "YouTube videonuzdan en can alıcı noktaları bulur, transkript çıkarır ve bunlardan onlarca kısa video ve SEO uyumlu blog içeriği üretir. SEO: Video repurposing ve otomatik içerik yönetimi.",
-        gains: { efficiency: "10x İçerik", timeSaving: "Haftalık 20 Saat" },
+        description:
+            "Uzun YouTube videolarınızdan otomatik olarak viral Shorts, Instagram Reels ve SEO blog yazıları üretin.",
+        details:
+            "Video repurposing otomasyonu ile tek bir YouTube videosu onlarca platforma yayılan içeriğe dönüşür. Yapay zeka videonuzdaki en güçlü anları tespit eder, altyazıyı çıkarır ve bunlardan viral kanca (hook) içeren kısa videolar ile Google'da sıralanan blog makaleleri üretir. İçerik oluşturucular ve marka hesapları için haftalık içerik programını tek seferlik video kaydıyla doldurun.",
+        roiData: { efficiency: "1 Videodan 10x İçerik", timeSaving: "Haftalık 20 Saat" },
         tools: ["Whisper AI", "GPT-4o", "CapCut API", "Buffer"],
-        benefits: ["Tek videodan 1 hafta içerik", "Otomatik blog yazımı", "Viral kanca (hook) üretimi"]
+        benefits: [
+            "Tek videodan 1 haftalık içerik takvimini doldurun",
+            "SEO uyumlu blog yazılarını otomatik yayınlayın",
+            "Viral Shorts ve Reels için kanca (hook) üretimini otomatikleştirin"
+        ]
     },
     {
         id: "seo-blogger",
-        title: "Otonom SEO & Blog Yazarı",
+        name: "Otonom SEO & Blog Yazarı",
         icon: PenTool,
-        description: "Sektörünüzle ilgili her gün Google'da üst sıralara çıkacak içerikler üretin.",
-        details: "Trendleri izler, anahtar kelime araştırması yapar ve web sitenize her gün sektörel otoritenizi artıracak profesyonel makaleler yükler. SEO: Yapay zeka ile otomatik blog ve SEO içerik üretimi.",
-        workflowDetails: "Trendleri izler, anahtar kelime araştırması yapar ve web sitenize her gün sektörel otoritenizi artıracak profesyonel makaleler yükler. SEO: Yapay zeka ile otomatik blog ve SEO içerik üretimi.",
-        gains: { efficiency: "5x Trafik", timeSaving: "Aylık 40 Saat" },
+        description:
+            "Sektörünüze ait anahtar kelimeleri araştıran, her gün Google'ın ilk sayfasına hedefleyen blog makaleleri üreten AI içerik sistemi.",
+        details:
+            "Organik trafik büyütmenin en düşük maliyetli yolu olan içerik SEO'sunu tamamen otomatize edin. Sistem günlük trendleri ve düşük rekabetli anahtar kelimeleri tarar, sektörel otoritenizi artıracak uzun-form makaleler yazar ve bunları web sitenize ya da WordPress'e otomatik yükler. E-ticaret siteleri, hizmet işletmeleri ve ajanslar için ayda 40 saatlik içerik çalışmasını sıfır çabayla yönetin.",
+        roiData: { efficiency: "5x Organik Trafik", timeSaving: "Aylık 40 Saat" },
         tools: ["Perplexity API", "n8n", "Next.js / WP API"],
-        benefits: ["Google'da hızlı yükseliş", "Sıfır eforla içerik yönetimi", "Sektörel otorite inşası"]
+        benefits: [
+            "Düşük rekabetli anahtar kelimelerle Google'da hızla üst sıralara çıkın",
+            "Sıfır eforla günlük içerik yönetimi ve otomatik yayınlama",
+            "Sektörünüzde otorite ve güven inşa edin"
+        ]
     },
     {
         id: "market-radar",
-        title: "Rakip İzleme & Pazar Radarı",
+        name: "Rakip İzleme & Pazar Radarı",
         icon: Search,
-        description: "Rakipleriniz ne paylaşıyor, ne satıyor? Radarınıza anında takılsın.",
-        details: "Rakip sosyal medya hesaplarını ve YouTube kanallarını izler. Yeni bir trend veya rakip hamlesi olduğunda size özet rapor sunar. SEO: Rakip analizi otomasyonu ve dijital pazar takibi.",
-        workflowDetails: "Rakip sosyal medya hesaplarını ve YouTube kanallarını izler. Yeni bir trend veya rakip hamlesi olduğunda size özet rapor sunar. SEO: Rakip analizi otomasyonu ve dijital pazar takibi.",
-        gains: { efficiency: "Anlık Takip", timeSaving: "Haftalık 12 Saat" },
+        description:
+            "Rakiplerinizin sosyal medya, fiyat ve kampanya hamlelerini anlık izleyen, size özet rapor sunan AI pazar takip sistemi.",
+        details:
+            "Dijital rakip analizi otomasyonu ile sektörünüzdeki her hareketi ilk öğrenen siz olun. Sistem rakip sosyal medya hesaplarını, YouTube kanallarını ve ürün fiyatlarını 7/24 tarar; yeni bir trend veya rakip kampanyası tespit ettiğinde sizi anında bildirir ve hazır özet rapor sunar. Pazarlama ekipleri için veri odaklı karar almayı haftalar değil dakikalar içinde mümkün kılar.",
+        roiData: { efficiency: "Anlık Pazar Takibi", timeSaving: "Haftalık 12 Saat" },
         tools: ["Apify", "n8n", "OpenAI", "YouTube Data API"],
-        benefits: ["Trendleri önce yakalayın", "Müşteri taleplerini görün", "Veriye dayalı pazarlama"]
+        benefits: [
+            "Sektör trendlerini rakiplerinizden önce yakalayın",
+            "Müşteri taleplerini ve şikayetlerini gerçek zamanlı görün",
+            "Veriye dayalı fiyat ve kampanya stratejisi oluşturun"
+        ]
     },
     {
         id: "data-analyst",
-        title: "AI Veri Analisti & Raporlama",
+        name: "AI Veri Analisti & Raporlama",
         icon: BarChart3,
-        description: "Karmaşık satış verilerinizi anlaşılır stratejik raporlara dönüştürün.",
-        details: "Satış tablolarınızı okur; 'Hangi ürün daha karlı?', 'Nerede hata yapıyoruz?' gibi sorularınıza anında grafikli ve bilimsel yanıtlar verir. SEO: İşletmeler için yapay zeka veri analizi.",
-        workflowDetails: "Satış tablolarınızı okur; 'Hangi ürün daha karlı?', 'Nerede hata yapıyoruz?' gibi sorularınıza anında grafikli ve bilimsel yanıtlar verir. SEO: İşletmeler için yapay zeka veri analizi.",
-        gains: { efficiency: "%100 Görünürlük", timeSaving: "Haftalık 10 Saat" },
+        description:
+            "Satış tablolarınızı, e-ticaret verilerinizi ve müşteri kayıtlarınızı otomatik analiz eden, aksiyon odaklı raporlar üreten yapay zeka sistemi.",
+        details:
+            "İşletmeniz için yapay zeka destekli veri analizi ile karmaşık Excel tablolarını ve satış raporlarını saniyeler içinde anlaşılır içgörülere dönüştürün. 'Hangi ürün en kârlı?', 'Hangi müşteri segmenti büyüyor?', 'Stokta ne zaman eksiklik yaşanır?' gibi kritik sorularınıza grafikli, anında yanıtlar alın. Muhasebe yazılımları ve Google Sheets ile doğrudan entegre çalışır.",
+        roiData: { efficiency: "%100 Veri Görünürlüğü", timeSaving: "Haftalık 10 Saat" },
         tools: ["Pandas AI", "OpenAI Assistant API", "Google Sheets"],
-        benefits: ["Net ve hızlı raporlar", "Gizli karlı kitle tespiti", "Akıllı stok tahminleme"]
+        benefits: [
+            "Karmaşık verileri net grafikler ve anlaşılır raporlara dönüştürün",
+            "Gizli kârlı müşteri segmentlerini ve ürünleri keşfedin",
+            "AI destekli stok tahminleme ile tedarik krizlerini önceden önleyin"
+        ]
     },
     {
         id: "special-flow",
-        title: "Özel İş Akışı Geliştirme",
+        name: "Özel İş Akışı Geliştirme",
         icon: Settings,
         isSpecial: true,
-        description: "İşletmenize özel, karmaşık süreçleri dijitalleştirin.",
-        details: "Mevcut iş süreçleriniz analiz edilerek darboğazlar belirlenir. Python scriptleri, AWS Lambda ve n8n workflowları kullanılarak size özel, ölçeklenebilir yapılar kurulur. SEO: Özel yapay zeka iş akışları ve mikro-servis otomasyonu.",
-        workflowDetails: "Mevcut iş süreçleriniz analiz edilerek darboğazlar belirlenir. Python scriptleri, AWS Lambda ve n8n workflowları kullanılarak size özel, ölçeklenebilir yapılar kurulur. SEO: Özel yapay zeka iş akışları ve mikro-servis otomasyonu.",
-        gains: { efficiency: "%95 Verimlilik", timeSaving: "150+ Saat/Ay" },
+        description:
+            "Mevcut iş süreçlerinizi analiz eden, darboğazları ortadan kaldıran ve işletmenize özel otomasyon altyapısı kuran terzi usulü AI çözümler.",
+        details:
+            "Her işletmenin ihtiyacı farklıdır. Mevcut iş akışlarınız ayrıntılı biçimde analiz edilerek zaman ve kaynak kaybı yaratan darboğazlar tespit edilir. Python scriptleri, AWS Lambda fonksiyonları ve n8n iş akışları kullanılarak mevcut CRM, ERP veya muhasebe sisteminizle entegre, tamamen özelleştirilmiş otomasyon mimarisi kurulur. Aylık 150+ saat manuel işi otomatize eden, işletmenizle birlikte büyüyen ölçeklenebilir çözümler.",
+        roiData: { efficiency: "%95 Süreç Verimliliği", timeSaving: "Ayda 150+ Saat" },
         tools: ["n8n", "Python", "AWS Lambda", "Custom API"],
-        benefits: ["Tamamen özelleştirilebilir", "Mevcut sistemle entegre", "Sınırsız ölçeklenebilirlik"]
+        benefits: [
+            "Mevcut yazılım ve sistemlerinizle sorunsuz entegrasyon",
+            "Her sektör ve iş modeline göre tamamen özelleştirilebilir yapı",
+            "İşletmenizle birlikte büyüyen, sınırsız ölçeklenebilir otomasyon altyapısı"
+        ]
     }
 ];
