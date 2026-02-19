@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/header";
 import { I18nProvider } from "@/components/providers/i18n-provider";
 import "./globals.css";
 import { GoogleAnalytics } from '@next/third-parties/google';
+import Script from 'next/script';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -59,6 +60,18 @@ export default function RootLayout({
           {children}
         </I18nProvider>
         <GoogleAnalytics gaId="G-RYVV2Y68HE" />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17954153412"
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads-tag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17954153412');
+          `}
+        </Script>
       </body>
     </html>
   );
