@@ -35,10 +35,10 @@ export default function Solutions() {
             <div className="relative z-10 max-w-7xl mx-auto">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold leading-[1.1] tracking-tight mb-4 text-white">
-                        Popüler 7 Yapay Zeka <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Otomasyonumuz</span>
+                        {dict.solutions_header.title_prefix} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">{dict.solutions_header.title_highlight}</span>
                     </h2>
                     <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-                        İş süreçlerinizi yapay zeka ve otomasyon ile dönüştüren güçlü çözümlerimiz.
+                        {dict.solutions_header.subtitle}
                     </p>
                 </div>
 

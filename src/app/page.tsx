@@ -5,6 +5,7 @@ import { TransformationScenarios } from "@/components/landing/transformation-sce
 import { Methodology } from "@/components/landing/methodology";
 import Solutions from "@/components/sections/Solutions";
 import { LeadForm } from "@/components/landing/lead-form";
+import { Faq } from "@/components/landing/faq";
 import { Footer } from "@/components/layout/footer";
 import { FutureOperations } from "@/components/landing/future-operations";
 // fix //
@@ -18,6 +19,7 @@ export default function Home() {
       <Solutions />
       <TransformationScenarios />
       <Methodology />
+      <Faq />
       <LeadForm />
       <Footer />
     </main>

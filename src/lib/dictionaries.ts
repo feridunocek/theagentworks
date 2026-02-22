@@ -134,6 +134,19 @@ export type Dictionary = {
         tools_technologies: string;
         cta_button: string;
     };
+    solutions_header: {
+        title_prefix: string;
+        title_highlight: string;
+        subtitle: string;
+    };
+    faq: {
+        title_prefix: string;
+        title_highlight: string;
+        subtitle: string;
+        items: { question: string; answer: string }[];
+        bottom_note: string;
+        bottom_note_link: string;
+    };
 };
 
 export const dictionaries: Record<string, Dictionary> = {
@@ -349,6 +362,40 @@ export const dictionaries: Record<string, Dictionary> = {
             benefits: "Avantajlar",
             tools_technologies: "Araçlar & Teknolojiler",
             cta_button: "Bu Sistemi İstiyorum"
+        },
+        solutions_header: {
+            title_prefix: "Popüler 7 Yapay Zeka",
+            title_highlight: "Otomasyonumuz",
+            subtitle: "İş süreçlerinizi yapay zeka ve otomasyon ile dönüştüren güçlü çözümlerimiz."
+        },
+        faq: {
+            title_prefix: "Aklınıza Takılanlar:",
+            title_highlight: "Otonom Geleceğe Geçiş",
+            subtitle: "Dijital dönüşüm yolculuğunuzda en çok merak edilen noktaları bir araya getirdik.",
+            items: [
+                {
+                    question: "Yapay zeka çözümleri sadece büyük ölçekli şirketler için mi?",
+                    answer: "Kesinlikle hayır. Biz, operasyonel yükünü ekibini büyütmeden yönetmek isteyen vizyoner işletmeler için buradayız. Amacımız, en gelişmiş teknolojileri her ölçekteki işletme için ulaşılabilir ve karlı kılmaktır."
+                },
+                {
+                    question: "Sistem kurulduktan sonra teknik bir ekibe ihtiyacım olacak mı?",
+                    answer: "Hayır. Biz \"tak-çalıştır\" mantığında otonom sistemler kuruyoruz. Tüm teknik karmaşayı biz yönetiyoruz; size sadece dijital çalışanlarınızın verimlilik raporlarını izlemek kalıyor."
+                },
+                {
+                    question: "Dijital çalışanlar mevcut yazılımlarımızla (CRM, Muhasebe vb.) konuşabilir mi?",
+                    answer: "Evet. Kullandığınız araçlar ne olursa olsun (n8n, Make veya özel API'ler aracılığıyla) sistemlerinizi birbirine bağlıyor ve verinin kesintisiz akmasını sağlıyoruz."
+                },
+                {
+                    question: "Yatırım maliyeti nedir? Küçük bir adımla başlayabilir miyim?",
+                    answer: "AgentWorks modüler bir yapı sunar. Tek bir \"Dijital Departman\" ile başlayıp verimliliği bizzat tecrübe ettikten sonra yapıyı ölçeklendirebilirsiniz. Yatırımın geri dönüşünü (ROI) haftalar içinde görmeniz bizim temel önceliğimizdir."
+                },
+                {
+                    question: "Verilerimiz ve müşteri bilgilerimiz güvende mi?",
+                    answer: "Güvenlik bizim için bir opsiyon değil, standarttır. Tüm sistemlerimiz kurumsal düzeyde şifreleme ve veri koruma protokolleriyle çalışır. Verileriniz sadece sizin kontrolünüzde kalır."
+                }
+            ],
+            bottom_note: "Başka bir sorunuz mu var? Aşağıdaki formdan bize ulaşın,",
+            bottom_note_link: "24 saat içinde yanıtlayalım."
         }
     },
     en: {
@@ -563,6 +610,40 @@ export const dictionaries: Record<string, Dictionary> = {
             benefits: "Benefits",
             tools_technologies: "Tools & Technologies",
             cta_button: "I Want This System"
+        },
+        solutions_header: {
+            title_prefix: "Popular 7 AI",
+            title_highlight: "Automations",
+            subtitle: "Our powerful solutions that transform your business processes with AI and automation."
+        },
+        faq: {
+            title_prefix: "Frequently Asked Questions:",
+            title_highlight: "Transition to the Autonomous Future",
+            subtitle: "We brought together the most curious points in your digital transformation journey.",
+            items: [
+                {
+                    question: "Are AI solutions only for large-scale companies?",
+                    answer: "Absolutely not. We are here for visionary businesses that want to manage their operational load without expanding their team. Our goal is to make the most advanced technologies accessible and profitable for businesses of all sizes."
+                },
+                {
+                    question: "Will I need a technical team after the system is installed?",
+                    answer: "No. We build autonomous systems with a \"plug-and-play\" logic. We manage all the technical complexity; all you have to do is monitor the efficiency reports of your digital employees."
+                },
+                {
+                    question: "Can digital employees talk to our existing software (CRM, Accounting, etc.)?",
+                    answer: "Yes. Regardless of the tools you use (via n8n, Make, or custom APIs), we connect your systems and ensure seamless data flow."
+                },
+                {
+                    question: "What is the investment cost? Can I start with a small step?",
+                    answer: "AgentWorks offers a modular structure. You can start with a single \"Digital Department\" and scale the structure after experiencing the efficiency firsthand. Seeing the return on investment (ROI) within weeks is our main priority."
+                },
+                {
+                    question: "Are our data and customer information secure?",
+                    answer: "Security is not an option for us, it's a standard. All our systems operate with enterprise-level encryption and data protection protocols. Your data remains only under your control."
+                }
+            ],
+            bottom_note: "Do you have another question? Contact us via the form below, and",
+            bottom_note_link: "we will respond within 24 hours."
         }
     },
     de: {
@@ -777,6 +858,40 @@ export const dictionaries: Record<string, Dictionary> = {
             benefits: "Vorteile",
             tools_technologies: "Werkzeuge & Technologien",
             cta_button: "Ich möchte dieses System"
+        },
+        solutions_header: {
+            title_prefix: "Beliebte 7 KI",
+            title_highlight: "Automatisierungen",
+            subtitle: "Unsere leistungsstarken Lösungen, die Ihre Geschäftsprozesse mit KI und Automatisierung transformieren."
+        },
+        faq: {
+            title_prefix: "Häufig Gestellte Fragen:",
+            title_highlight: "Übergang in eine autonome Zukunft",
+            subtitle: "Wir haben die wichtigsten Fragen zu Ihrer digitalen Transformation zusammengefasst.",
+            items: [
+                {
+                    question: "Sind KI-Lösungen nur für große Unternehmen geeignet?",
+                    answer: "Absolut nicht. Wir sind für visionäre Unternehmen da, die ihre operative Belastung verwalten möchten, ohne ihr Team zu vergrößern. Unser Ziel ist es, die fortschrittlichsten Technologien für Unternehmen jeder Größe zugänglich und profitabel zu machen."
+                },
+                {
+                    question: "Benötige ich nach der Systeminstallation ein technisches Team?",
+                    answer: "Nein. Wir bauen autonome Systeme mit einer \"Plug-and-Play\"-Logik. Wir verwalten die gesamte technische Komplexität; Sie müssen lediglich die Effizienzberichte Ihrer digitalen Mitarbeiter überwachen."
+                },
+                {
+                    question: "Können digitale Mitarbeiter mit unserer vorhandenen Software (CRM, Buchhaltung usw.) kommunizieren?",
+                    answer: "Ja. Unabhängig von den verwendeten Tools (über n8n, Make oder benutzerdefinierte APIs) verbinden wir Ihre Systeme und gewährleisten einen nahtlosen Datenfluss."
+                },
+                {
+                    question: "Wie hoch sind die Investitionskosten? Kann ich mit einem kleinen Schritt beginnen?",
+                    answer: "AgentWorks bietet eine modulare Struktur. Sie können mit einer einzelnen \"Digitalen Abteilung\" beginnen und die Struktur skalieren, nachdem Sie die Effizienz aus erster Hand erfahren haben. Die Amortisation der Investition (ROI) innerhalb von Wochen ist unsere oberste Priorität."
+                },
+                {
+                    question: "Sind unsere Daten und Kundeninformationen sicher?",
+                    answer: "Sicherheit ist für uns keine Option, sondern Standard. Alle unsere Systeme arbeiten mit unternehmensweiten Verschlüsselungs- und Datenschutzprotokollen. Ihre Daten bleiben ausschließlich unter Ihrer Kontrolle."
+                }
+            ],
+            bottom_note: "Haben Sie noch eine Frage? Kontaktieren Sie uns über das untenstehende Formular, und",
+            bottom_note_link: "wir werden innerhalb von 24 Stunden antworten."
         }
     }
 };
