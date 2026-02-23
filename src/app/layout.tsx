@@ -38,11 +38,6 @@ export const metadata: Metadata = {
     title: "The Agent Works | Geleceğin İş Gücü",
     images: ["https://www.theagent-works.com/share-image.webp"],
   },
-  icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-  },
 };
 
 export default function RootLayout({
