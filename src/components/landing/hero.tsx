@@ -57,11 +57,11 @@ export function Hero() {
                     <div className="flex items-center gap-8 pt-6 border-t border-white/5 justify-center lg:justify-start">
                         <div>
                             <span className="block text-xl md:text-2xl font-bold text-white">500+</span>
-                            <span className="text-xs md:text-sm text-gray-500">Otomatize Edilen Saat</span>
+                            <span className="text-xs md:text-sm text-gray-500">{dict.hero.metrics.automated_hours}</span>
                         </div>
                         <div>
                             <span className="block text-xl md:text-2xl font-bold text-white">%85</span>
-                            <span className="text-xs md:text-sm text-gray-500">Ortalama Verim Artışı</span>
+                            <span className="text-xs md:text-sm text-gray-500">{dict.hero.metrics.efficiency_increase}</span>
                         </div>
                     </div>
                 </motion.div>
@@ -127,8 +127,8 @@ export function Hero() {
                             <Sparkles size={16} />
                         </div>
                         <div>
-                            <div className="text-[10px] lg:text-xs text-gray-400 font-medium tracking-wide uppercase">AI Performance</div>
-                            <div className="text-xs lg:text-base font-bold text-white">7/24 Kesintisiz Dijital İş Gücü</div>
+                            <div className="text-[10px] lg:text-xs text-gray-400 font-medium tracking-wide uppercase">{dict.hero.floating_badge.title}</div>
+                            <div className="text-xs lg:text-base font-bold text-white">{dict.hero.floating_badge.subtitle}</div>
                         </div>
                     </motion.div>
                 </motion.div>

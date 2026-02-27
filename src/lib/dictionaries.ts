@@ -15,6 +15,14 @@ export type Dictionary = {
         subtitle: string;
         cta_primary: string;
         cta_secondary: string;
+        metrics: {
+            automated_hours: string;
+            efficiency_increase: string;
+        };
+        floating_badge: {
+            title: string;
+            subtitle: string;
+        };
     };
     footer: {
         rights: string;
@@ -166,7 +174,15 @@ export const dictionaries: Record<string, Dictionary> = {
             title_highlight: "dijitalin gücüyle devleştirme zamanı.",
             subtitle: "Ekibinizi stratejik hedeflere odaklarken, dijital çalışanlarınızla verimlilik artışınızı izleyin. AgentWorks ile işletmeniz için 7/24 çalışan otonom dijital departmanlar kurun ve işletmenizin sınırlarını yeniden çizin.",
             cta_primary: "Hizmetler",
-            cta_secondary: "Nasıl Çalışır?"
+            cta_secondary: "Nasıl Çalışır?",
+            metrics: {
+                automated_hours: "Otomatize Edilen Saat",
+                efficiency_increase: "Ortalama Verim Artışı"
+            },
+            floating_badge: {
+                title: "AI Performance",
+                subtitle: "7/24 Kesintisiz Dijital İş Gücü"
+            }
         },
         footer: {
             rights: "Tüm hakları saklıdır.",
@@ -414,7 +430,15 @@ export const dictionaries: Record<string, Dictionary> = {
             title_highlight: "Backbone of Business",
             subtitle: "Break free from routine operations, maximize efficiency. AgentWorks builds autonomous digital departments working 24/7 for you.",
             cta_primary: "Services",
-            cta_secondary: "How It Works?"
+            cta_secondary: "How It Works?",
+            metrics: {
+                automated_hours: "Automated Hours",
+                efficiency_increase: "Average Efficiency Increase"
+            },
+            floating_badge: {
+                title: "AI Performance",
+                subtitle: "24/7 Uninterrupted Digital Workforce"
+            }
         },
         footer: {
             rights: "All rights reserved.",
@@ -662,7 +686,15 @@ export const dictionaries: Record<string, Dictionary> = {
             title_highlight: "Rückgrat des Geschäfts",
             subtitle: "Befreien Sie sich von Routineaufgaben, maximieren Sie die Effizienz. AgentWorks baut autonome digitale Abteilungen, die 24/7 für Sie arbeiten.",
             cta_primary: "Dienstleistungen",
-            cta_secondary: "Wie es funktioniert?"
+            cta_secondary: "Wie es funktioniert?",
+            metrics: {
+                automated_hours: "Automatisierte Stunden",
+                efficiency_increase: "Durchschnittliche Effizienzsteigerung"
+            },
+            floating_badge: {
+                title: "KI-Leistung",
+                subtitle: "24/7 Digitale Belegschaft"
+            }
         },
         footer: {
             rights: "Alle Rechte vorbehalten.",
@@ -773,9 +805,9 @@ export const dictionaries: Record<string, Dictionary> = {
             description: "AgentWorks delegiert wiederkehrende Operationen an autonome Agenten und schafft so Raum für Ihr Team für strategisches Wachstum.",
             benefits: ["Eine von Routinen befreite Arbeitskultur.", "Frische Kapazität für strategische Projekte.", "Skalierbare digitale Infrastruktur."],
             calculator: {
-                title: "Verimlilik Hesaplayıcı",
+                title: "Effizienzrechner",
                 label_workload: "ROUTINE-AUFWAND",
-                label_role_type: "Operasyon Tipi",
+                label_role_type: "Positionstyp",
                 roles: { operational: "Operative Unterstützung", expert: "Experte", manager: "Manager" },
                 result_time: "Jährlich gewonnene Zeit",
                 result_efficiency: "Team-Effizienzsteigerung",
