@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Sora } from "next/font/google";
 import { Header } from "@/components/layout/header";
+import { FloatingWhatsAppButton } from "@/components/layout/floating-whatsapp";
 import { I18nProvider } from "@/components/providers/i18n-provider";
 import "./globals.css";
 import { GoogleAnalytics } from '@next/third-parties/google';
@@ -53,6 +54,7 @@ export default function RootLayout({
         <I18nProvider>
           <Header />
           {children}
+          <FloatingWhatsAppButton />
         </I18nProvider>
         <GoogleAnalytics gaId="G-RYVV2Y68HE" />
         <Script

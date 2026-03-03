@@ -155,6 +155,10 @@ export type Dictionary = {
         bottom_note: string;
         bottom_note_link: string;
     };
+    floating_whatsapp: {
+        tooltip: string;
+        message: string;
+    };
 };
 
 export const dictionaries: Record<string, Dictionary> = {
@@ -412,6 +416,10 @@ export const dictionaries: Record<string, Dictionary> = {
             ],
             bottom_note: "Başka bir sorunuz mu var? Aşağıdaki formdan bize ulaşın,",
             bottom_note_link: "24 saat içinde yanıtlayalım."
+        },
+        floating_whatsapp: {
+            tooltip: "AI Asistanımıza Sorun 🤖",
+            message: "Merhaba AgentWorks, otonom sistemleriniz hakkında bilgi almak istiyorum."
         }
     },
     en: {
@@ -668,6 +676,10 @@ export const dictionaries: Record<string, Dictionary> = {
             ],
             bottom_note: "Do you have another question? Contact us via the form below, and",
             bottom_note_link: "we will respond within 24 hours."
+        },
+        floating_whatsapp: {
+            tooltip: "Ask our AI Assistant 🤖",
+            message: "Hello AgentWorks, I would like to get information about your autonomous systems."
         }
     },
     de: {
@@ -924,6 +936,10 @@ export const dictionaries: Record<string, Dictionary> = {
             ],
             bottom_note: "Haben Sie noch eine Frage? Kontaktieren Sie uns über das untenstehende Formular, und",
             bottom_note_link: "wir werden innerhalb von 24 Stunden antworten."
+        },
+        floating_whatsapp: {
+            tooltip: "Fragen Sie unseren KI-Assistenten 🤖",
+            message: "Hallo AgentWorks, ich möchte Informationen über Ihre autonomen Systeme erhalten."
         }
     }
 };
