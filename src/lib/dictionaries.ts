@@ -30,6 +30,9 @@ export type Dictionary = {
         privacy: string;
         cookies: string;
         copyright: string;
+        slogan: string;
+        credit_prefix: string;
+        credit_suffix: string;
     };
     future_operations: {
         title_prefix: string;
@@ -193,7 +196,10 @@ export const dictionaries: Record<string, Dictionary> = {
             terms: "Kullanım Koşulları",
             privacy: "Gizlilik Politikası",
             cookies: "KVKK ve Çerez",
-            copyright: "AgentWorks Inc."
+            copyright: "AgentWorks Inc.",
+            slogan: "Geleceğin otomasyon mimarisi.",
+            credit_prefix: "THEAGENTWORKS BİR",
+            credit_suffix: "MARİFETİDİR."
         },
         future_operations: {
             title_prefix: "Geleceğin İşleyişine",
@@ -453,7 +459,10 @@ export const dictionaries: Record<string, Dictionary> = {
             terms: "Terms of Use",
             privacy: "Privacy Policy",
             cookies: "Cookies & GDPR",
-            copyright: "AgentWorks Inc."
+            copyright: "AgentWorks Inc.",
+            slogan: "The automation architecture of the future.",
+            credit_prefix: "THEAGENTWORKS IS PROUDLY BUILT BY",
+            credit_suffix: ""
         },
         future_operations: {
             title_prefix: "Welcome to the",
@@ -713,7 +722,10 @@ export const dictionaries: Record<string, Dictionary> = {
             terms: "Nutzungsbedingungen",
             privacy: "Datenschutzrichtlinie",
             cookies: "Cookies & DSGVO",
-            copyright: "AgentWorks Inc."
+            copyright: "AgentWorks Inc.",
+            slogan: "Die Automatisierungsarchitektur der Zukunft.",
+            credit_prefix: "THEAGENTWORKS IST EIN WERK VON",
+            credit_suffix: ""
         },
         future_operations: {
             title_prefix: "Willkommen in der",
