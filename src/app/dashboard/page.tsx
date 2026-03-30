@@ -96,7 +96,7 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-[#0F1117] text-[#ededed] font-sans pt-12 pb-24 px-6">
+    <div className="min-h-screen bg-[#0F1117] text-[#ededed] font-sans pb-24 px-6" style={{ paddingTop: '160px' }}>
       <div className="container mx-auto max-w-7xl">
         
         {/* Header */}

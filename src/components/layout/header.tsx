@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { NeonButton } from "../ui/neon-button";
@@ -23,11 +24,18 @@ export function Header() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    const pathname = usePathname();
+    const router = useRouter();
+
     const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
         e.preventDefault();
-        const element = document.getElementById(id);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+        if (pathname === '/') {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        } else {
+            router.push(`/#${id}`);
         }
     };
 
@@ -45,7 +53,14 @@ export function Header() {
             <div className="w-full max-w-7xl flex items-center justify-between relative px-4 md:px-6">
 
                 {/* Left: Logo Area */}
-                <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="relative z-10 shrink-0 pointer-events-auto transition-transform hover:scale-105 duration-300 flex items-center">
+                <a href="/" onClick={(e) => { 
+                    e.preventDefault(); 
+                    if (pathname === '/') {
+                        window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                    } else {
+                        router.push('/');
+                    }
+                }} className="relative z-10 shrink-0 pointer-events-auto transition-transform hover:scale-105 duration-300 flex items-center">
                     <div
                         className={cn(
                             "relative transition-all duration-500 ease-in-out",
