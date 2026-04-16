@@ -37,8 +37,8 @@ export function Footer() {
 
                     {/* Right: Contact Info */}
                     <div className="flex flex-col items-center md:items-end gap-2 text-sm text-[#999] tracking-wide">
-                        <a href="tel:+905352215292" className="hover:text-[var(--color-neon-cyan)] transition-colors">
-                            +90 535 221 52 92
+                        <a href="tel:+902162341595" className="hover:text-[var(--color-neon-cyan)] transition-colors">
+                            0216 234 15 95
                         </a>
                         <a href="mailto:info@theagent-works.com" className="hover:text-[var(--color-neon-cyan)] transition-colors">
                             info@theagent-works.com
