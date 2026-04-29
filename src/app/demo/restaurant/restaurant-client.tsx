@@ -3,7 +3,11 @@
 import { useState, useEffect } from "react";
 import { useI18n } from "@/components/providers/i18n-provider";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart, ChefHat, LayoutDashboard, Plus, Minus, Check, Clock, X, Flame } from "lucide-react";
+import { 
+  ShoppingCart, ChefHat, LayoutDashboard, Plus, Minus, Check, Clock, X, Flame, 
+  Settings, QrCode, List, Users, Bell, HelpCircle, LogOut, Upload, Copy, Edit,
+  UtensilsCrossed, MonitorPlay
+} from "lucide-react";
 
 type OrderItem = {
   id: string;
@@ -24,6 +28,24 @@ type Order = {
   preparedAt?: number;
   completedAt?: number;
 };
+
+type RestaurantConfig = {
+  name: string;
+  themeColor: string;
+};
+
+const DEFAULT_CONFIG: RestaurantConfig = {
+  name: "OrderEasy Pro",
+  themeColor: "#22c55e"
+};
+
+const THEME_COLORS = [
+  { id: 'red', value: '#ef4444' },
+  { id: 'orange', value: '#f59e0b' },
+  { id: 'green', value: '#22c55e' },
+  { id: 'blue', value: '#3b82f6' },
+  { id: 'purple', value: '#d946ef' },
+];
 
 const menuData = {
   starters: [
@@ -75,9 +97,9 @@ export function RestaurantClient() {
 
   const [activeTab, setActiveTab] = useState<"menu" | "mutfak" | "yonetim">("menu");
   const [orders, setOrders] = useState<Order[]>([]);
+  const [config, setConfig] = useState<RestaurantConfig>(DEFAULT_CONFIG);
 
   useEffect(() => {
-    // Read hash
     const handleHash = () => {
       const hash = window.location.hash.replace("#", "");
       if (hash === "mutfak" || hash === "yonetim") {
@@ -90,21 +112,20 @@ export function RestaurantClient() {
     handleHash();
     window.addEventListener("hashchange", handleHash);
 
-    // Sync orders from localStorage
-    const loadOrders = () => {
-      const saved = localStorage.getItem("restaurant_orders");
-      if (saved) {
-        setOrders(JSON.parse(saved));
-      }
+    const loadData = () => {
+      const savedOrders = localStorage.getItem("restaurant_orders");
+      if (savedOrders) setOrders(JSON.parse(savedOrders));
+
+      const savedConfig = localStorage.getItem("restaurant_config");
+      if (savedConfig) setConfig(JSON.parse(savedConfig));
     };
 
-    loadOrders();
-    window.addEventListener("storage", loadOrders);
+    loadData();
+    window.addEventListener("storage", loadData);
 
-    // Initial setup if empty
     return () => {
       window.removeEventListener("hashchange", handleHash);
-      window.removeEventListener("storage", loadOrders);
+      window.removeEventListener("storage", loadData);
     };
   }, []);
 
@@ -114,36 +135,46 @@ export function RestaurantClient() {
     window.dispatchEvent(new Event("storage"));
   };
 
+  const saveConfig = (newConfig: RestaurantConfig) => {
+    setConfig(newConfig);
+    localStorage.setItem("restaurant_config", JSON.stringify(newConfig));
+    window.dispatchEvent(new Event("storage"));
+  };
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-[#ededed] font-[family-name:var(--font-sora)] pb-24 selection:bg-[#00f3ff] selection:text-black">
       
       {/* Dev Navigation (Demo Purposes) */}
       <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-white/5 backdrop-blur-xl px-2 py-2 rounded-full border border-white/10 z-[100] flex gap-2 shadow-2xl">
-        <a href="#menu" className={`px-4 py-2 rounded-full text-xs md:text-sm font-bold flex items-center gap-2 transition-all duration-300 ${activeTab === 'menu' ? 'bg-[#f59e0b] text-black shadow-[0_0_15px_rgba(245,158,11,0.4)]' : 'text-white/50 hover:bg-white/10'}`}>
+        <a href="#menu" className={`px-4 py-2 rounded-full text-xs md:text-sm font-bold flex items-center gap-2 transition-all duration-300 ${activeTab === 'menu' ? 'text-black shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-white/50 hover:bg-white/10'}`} style={activeTab === 'menu' ? { backgroundColor: config.themeColor } : {}}>
           <ShoppingCart size={16} /> <span className="hidden sm:inline">Müşteri</span>
         </a>
         <a href="#mutfak" className={`px-4 py-2 rounded-full text-xs md:text-sm font-bold flex items-center gap-2 transition-all duration-300 ${activeTab === 'mutfak' ? 'bg-[#ef4444] text-white shadow-[0_0_15px_rgba(239,68,68,0.4)]' : 'text-white/50 hover:bg-white/10'}`}>
           <ChefHat size={16} /> <span className="hidden sm:inline">Mutfak</span>
         </a>
-        <a href="#yonetim" className={`px-4 py-2 rounded-full text-xs md:text-sm font-bold flex items-center gap-2 transition-all duration-300 ${activeTab === 'yonetim' ? 'bg-[#3b82f6] text-white shadow-[0_0_15px_rgba(59,130,246,0.4)]' : 'text-white/50 hover:bg-white/10'}`}>
+        <a href="#yonetim" className={`px-4 py-2 rounded-full text-xs md:text-sm font-bold flex items-center gap-2 transition-all duration-300 ${activeTab === 'yonetim' ? 'text-white shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-white/50 hover:bg-white/10'}`} style={activeTab === 'yonetim' ? { backgroundColor: config.themeColor } : {}}>
           <LayoutDashboard size={16} /> <span className="hidden sm:inline">Yönetim</span>
         </a>
       </div>
 
       <AnimatePresence mode="wait">
-        {activeTab === "menu" && <CustomerMenu key="menu" dict={dr} onOrder={(order) => saveOrders([...orders, order])} />}
+        {activeTab === "menu" && <CustomerMenu key="menu" dict={dr} config={config} onOrder={(order) => saveOrders([...orders, order])} />}
         {activeTab === "mutfak" && <KitchenScreen key="mutfak" dict={dr} orders={orders} updateOrder={(id, status) => {
             const up = orders.map(o => o.id === id ? { ...o, status, ...(status === 'preparing' ? { preparedAt: Date.now() } : { completedAt: Date.now() }) } : o);
             saveOrders(up);
         }} />}
-        {activeTab === "yonetim" && <AdminDashboard key="yonetim" dict={dr} orders={orders} />}
+        {activeTab === "yonetim" && <AdminDashboard key="yonetim" dict={dr} orders={orders} config={config} updateConfig={saveConfig} />}
       </AnimatePresence>
 
     </div>
   );
 }
 
-function CustomerMenu({ dict, onOrder }: { dict: any, onOrder: (o: Order) => void }) {
+// -------------------------------------------------------------
+// CUSTOMER MENU
+// -------------------------------------------------------------
+
+function CustomerMenu({ dict, config, onOrder, isPreview = false }: { dict: any, config: RestaurantConfig, onOrder?: (o: Order) => void, isPreview?: boolean }) {
   const [cart, setCart] = useState<Record<string, number>>({});
   const [table, setTable] = useState<number>(1);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -170,7 +201,7 @@ function CustomerMenu({ dict, onOrder }: { dict: any, onOrder: (o: Order) => voi
   const cartCount = Object.values(cart).reduce((acc, q) => acc + q, 0);
 
   const placeOrder = () => {
-    if (cartCount === 0) return;
+    if (cartCount === 0 || !onOrder) return;
     const items = Object.entries(cart).map(([id, quantity]) => {
       const price = Object.values(menuData).flat().find(i => i.id === id)?.price || 0;
       return { id, quantity, price };
@@ -204,31 +235,35 @@ function CustomerMenu({ dict, onOrder }: { dict: any, onOrder: (o: Order) => voi
   ];
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="pb-12">
-      {/* Header */}
+    <motion.div initial={!isPreview ? { opacity: 0 } : false} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={`${isPreview ? 'h-full overflow-y-auto no-scrollbar pb-24 bg-[#0a0a0a]' : 'pb-12'}`}>
+      
       <header className="sticky top-0 z-40 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/10 px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Flame className="text-[#f59e0b]" />
-            <span className="font-bold text-xl tracking-tight">Ateş Kebap</span>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: config.themeColor }}>
+              <Flame size={16} />
+            </div>
+            <span className="font-bold text-lg tracking-tight line-clamp-1">{config.name}</span>
           </div>
-          <div className="flex items-center gap-4">
-            <select 
-              value={table} 
-              onChange={(e) => setTable(Number(e.target.value))}
-              className="bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-sm outline-none focus:border-[#f59e0b]"
-            >
-              {Array.from({length: 20}).map((_, i) => (
-                <option key={i} value={i+1} className="bg-[#141414]">Masa {i+1}</option>
-              ))}
-            </select>
+          <div className="flex items-center gap-2">
+            {!isPreview && (
+              <select 
+                value={table} 
+                onChange={(e) => setTable(Number(e.target.value))}
+                className="bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-xs outline-none focus:border-white/30"
+              >
+                {Array.from({length: 20}).map((_, i) => (
+                  <option key={i} value={i+1} className="bg-[#141414]">Masa {i+1}</option>
+                ))}
+              </select>
+            )}
             <button 
               onClick={() => setIsCartOpen(true)}
               className="relative p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
             >
-              <ShoppingCart size={20} />
+              <ShoppingCart size={18} />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#f59e0b] text-black text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 text-black text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center" style={{ backgroundColor: config.themeColor }}>
                   {cartCount}
                 </span>
               )}
@@ -236,14 +271,14 @@ function CustomerMenu({ dict, onOrder }: { dict: any, onOrder: (o: Order) => voi
           </div>
         </div>
         
-        {/* Nav */}
         <div className="max-w-2xl mx-auto mt-4 overflow-x-auto no-scrollbar">
           <div className="flex gap-2 min-w-max pb-2">
-            {categories.map(c => (
+            {categories.map((c, idx) => (
               <a 
                 key={c.id} 
-                href={`#cat-${c.id}`}
-                className="px-4 py-1.5 rounded-full text-sm font-semibold bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+                href={isPreview ? undefined : `#cat-${c.id}`}
+                className="px-3 py-1.5 rounded-full text-xs font-semibold bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+                style={idx === 0 ? { backgroundColor: config.themeColor, color: '#000' } : {}}
               >
                 {c.label}
               </a>
@@ -252,36 +287,37 @@ function CustomerMenu({ dict, onOrder }: { dict: any, onOrder: (o: Order) => voi
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 pt-6 space-y-12">
+      <main className="max-w-2xl mx-auto px-4 pt-6 space-y-8">
         {categories.map(c => (
-          <section key={c.id} id={`cat-${c.id}`} className="scroll-mt-36">
-            <h2 className="text-xl font-bold mb-4 text-[#f59e0b]">{c.label}</h2>
-            <div className="grid grid-cols-1 gap-4">
+          <section key={c.id} id={isPreview ? undefined : `cat-${c.id}`} className="scroll-mt-36">
+            <h2 className="text-lg font-bold mb-4" style={{ color: config.themeColor }}>{c.label}</h2>
+            <div className="grid grid-cols-1 gap-3">
               {menuData[c.id as keyof typeof menuData].map(item => {
                 const qty = cart[item.id] || 0;
                 const info = dict.menu.items[item.id];
                 return (
-                  <div key={item.id} className={`p-4 rounded-2xl border transition-all duration-300 ${qty > 0 ? 'border-[#f59e0b] bg-[#f59e0b]/5' : 'border-white/5 bg-[#141414] hover:border-white/10'}`}>
+                  <div key={item.id} className={`p-3 rounded-2xl border transition-all duration-300 ${qty > 0 ? 'bg-white/5' : 'border-white/5 bg-[#141414] hover:border-white/10'}`} style={qty > 0 ? { borderColor: config.themeColor } : {}}>
                     <div className="flex justify-between items-start gap-4">
                       <div>
-                        <h3 className="font-bold text-lg">{info?.name || item.id}</h3>
-                        <p className="text-white/50 text-sm mt-1 mb-3">{info?.desc}</p>
-                        <span className="font-bold text-[#f59e0b]">{dict.common.currency}{item.price}</span>
+                        <h3 className="font-bold text-sm">{info?.name || item.id}</h3>
+                        <p className="text-white/50 text-xs mt-1 mb-2 line-clamp-2">{info?.desc}</p>
+                        <span className="font-bold text-sm" style={{ color: config.themeColor }}>{dict.common.currency}{item.price}</span>
                       </div>
                       
-                      <div className="flex items-center gap-3 bg-white/5 rounded-full p-1 border border-white/5 shrink-0">
+                      <div className="flex items-center gap-2 bg-white/5 rounded-full p-1 border border-white/5 shrink-0">
                         <button 
                           onClick={() => updateQuantity(item.id, -1)}
-                          className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${qty > 0 ? 'bg-white/10 hover:bg-white/20 text-white' : 'text-white/20 cursor-not-allowed'}`}
+                          className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${qty > 0 ? 'bg-white/10 hover:bg-white/20 text-white' : 'text-white/20 cursor-not-allowed'}`}
                         >
-                          <Minus size={14} />
+                          <Minus size={12} />
                         </button>
-                        <span className="font-bold w-4 text-center">{qty}</span>
+                        <span className="font-bold w-3 text-center text-xs">{qty}</span>
                         <button 
                           onClick={() => updateQuantity(item.id, 1)}
-                          className="w-8 h-8 rounded-full bg-[#f59e0b]/20 hover:bg-[#f59e0b]/30 text-[#f59e0b] flex items-center justify-center transition-colors"
+                          className="w-6 h-6 rounded-full flex items-center justify-center transition-colors text-black"
+                          style={{ backgroundColor: config.themeColor }}
                         >
-                          <Plus size={14} />
+                          <Plus size={12} />
                         </button>
                       </div>
                     </div>
@@ -293,71 +329,62 @@ function CustomerMenu({ dict, onOrder }: { dict: any, onOrder: (o: Order) => voi
         ))}
       </main>
 
-      {/* Cart Drawer Overlay */}
       <AnimatePresence>
         {isCartOpen && (
           <>
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setIsCartOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50"
             />
             <motion.div 
-              initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
+              initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-full sm:w-96 bg-[#141414] border-l border-white/10 z-50 flex flex-col shadow-2xl"
+              className="absolute left-0 right-0 bottom-0 max-h-[80vh] bg-[#141414] border-t border-white/10 z-50 flex flex-col rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)]"
             >
-              <div className="p-4 border-b border-white/10 flex justify-between items-center bg-[#0a0a0a]">
-                <h2 className="text-xl font-bold">{dict.menu.cart}</h2>
+              <div className="p-4 border-b border-white/10 flex justify-between items-center bg-[#1a1a1a] rounded-t-3xl">
+                <h2 className="text-lg font-bold">{dict.menu.cart}</h2>
                 <button onClick={() => setIsCartOpen(false)} className="p-2 hover:bg-white/10 rounded-full">
-                  <X size={20} />
+                  <X size={16} />
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              <div className="flex-1 overflow-y-auto p-4 space-y-3">
                 {cartCount === 0 ? (
-                  <p className="text-center text-white/40 mt-10">{dict.menu.empty_cart}</p>
+                  <p className="text-center text-white/40 mt-6 text-sm">{dict.menu.empty_cart}</p>
                 ) : (
                   Object.entries(cart).map(([id, qty]) => {
                     const price = Object.values(menuData).flat().find(i => i.id === id)?.price || 0;
                     const info = dict.menu.items[id];
                     return (
-                      <div key={id} className="flex justify-between items-center gap-2">
+                      <div key={id} className="flex justify-between items-center gap-2 text-sm">
                         <div>
                           <div className="font-semibold">{info?.name || id}</div>
-                          <div className="text-sm text-[#f59e0b]">{dict.common.currency}{price} x {qty}</div>
+                          <div className="text-xs" style={{ color: config.themeColor }}>{dict.common.currency}{price} x {qty}</div>
                         </div>
                         <div className="font-bold">{dict.common.currency}{price * qty}</div>
                       </div>
                     );
                   })
                 )}
-
-                {cartCount > 0 && (
-                  <textarea 
-                    placeholder={dict.menu.order_note}
-                    value={note}
-                    onChange={e => setNote(e.target.value)}
-                    className="w-full mt-4 bg-white/5 border border-white/10 rounded-xl p-3 text-sm outline-none focus:border-[#f59e0b] min-h-[80px]"
-                  />
-                )}
               </div>
 
-              <div className="p-4 border-t border-white/10 bg-[#0a0a0a]">
+              <div className="p-4 border-t border-white/10 bg-[#1a1a1a]">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-white/60">{dict.menu.total}:</span>
-                  <span className="text-2xl font-bold text-[#f59e0b]">{dict.common.currency}{cartTotal}</span>
+                  <span className="text-white/60 text-sm">{dict.menu.total}:</span>
+                  <span className="text-xl font-bold" style={{ color: config.themeColor }}>{dict.common.currency}{cartTotal}</span>
                 </div>
                 <button 
                   onClick={placeOrder}
                   disabled={cartCount === 0 || success}
-                  className={`w-full py-4 rounded-xl font-bold flex items-center justify-center transition-all ${
+                  className={`w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center transition-all ${
                     success ? 'bg-green-500 text-white' : 
-                    cartCount > 0 ? 'bg-[#f59e0b] text-black hover:brightness-110' : 'bg-white/10 text-white/40'
+                    cartCount > 0 ? 'text-black hover:brightness-110' : 'bg-white/10 text-white/40'
                   }`}
+                  style={success ? {} : cartCount > 0 ? { backgroundColor: config.themeColor } : {}}
                 >
                   {success ? (
-                    <><Check className="mr-2" /> {dict.menu.success_msg}</>
+                    <><Check className="mr-2" size={16} /> {dict.menu.success_msg}</>
                   ) : dict.menu.place_order}
                 </button>
               </div>
@@ -369,6 +396,10 @@ function CustomerMenu({ dict, onOrder }: { dict: any, onOrder: (o: Order) => voi
     </motion.div>
   );
 }
+
+// -------------------------------------------------------------
+// KITCHEN SCREEN
+// -------------------------------------------------------------
 
 function KitchenScreen({ dict, orders, updateOrder }: { dict: any, orders: Order[], updateOrder: (id: string, s: OrderStatus) => void }) {
   const newOrders = orders.filter(o => o.status === "new");
@@ -476,12 +507,237 @@ function KitchenScreen({ dict, orders, updateOrder }: { dict: any, orders: Order
   );
 }
 
-function AdminDashboard({ dict, orders }: { dict: any, orders: Order[] }) {
+// -------------------------------------------------------------
+// ADMIN DASHBOARD (SaaS Layout)
+// -------------------------------------------------------------
+
+function AdminDashboard({ dict, orders, config, updateConfig }: { dict: any, orders: Order[], config: RestaurantConfig, updateConfig: (c: RestaurantConfig) => void }) {
+  const [activeAdminTab, setActiveAdminTab] = useState("tema");
+
+  const todayRevenue = orders.filter(o => o.status === "completed").reduce((acc, o) => acc + o.total, 0);
+  const activeOrdersCount = orders.filter(o => o.status !== "completed").length;
+
+  const sidebarLinks = [
+    { section: "RESTORAN", links: [
+      { id: "preview", label: "Müşteri Menüsü", icon: <MonitorPlay size={18} /> },
+      { id: "kitchen", label: "Mutfak Ekranı", icon: <ChefHat size={18} />, badge: activeOrdersCount },
+      { id: "tables", label: "Aktif Masalar", icon: <Users size={18} /> },
+    ]},
+    { section: "YÖNETİM", links: [
+      { id: "dashboard", label: "Dashboard", icon: <LayoutDashboard size={18} /> },
+      { id: "menu", label: "Menü Editörü", icon: <List size={18} /> },
+      { id: "tema", label: "Tema & QR", icon: <QrCode size={18} /> },
+      { id: "settings", label: "Ayarlar", icon: <Settings size={18} /> },
+    ]}
+  ];
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex h-screen bg-[#050505] overflow-hidden">
+      
+      {/* Sidebar */}
+      <div className="w-64 bg-[#0a0a0a] border-r border-white/10 flex flex-col hidden md:flex shrink-0">
+        <div className="h-16 flex items-center px-6 border-b border-white/10">
+          <div className="w-6 h-6 rounded-md mr-3 flex items-center justify-center text-white" style={{ backgroundColor: config.themeColor }}>
+            <UtensilsCrossed size={14} />
+          </div>
+          <span className="font-bold text-lg">OrderEasy Pro</span>
+        </div>
+
+        <div className="flex-1 overflow-y-auto py-6 space-y-8 no-scrollbar">
+          {sidebarLinks.map((group, idx) => (
+            <div key={idx} className="px-4">
+              <div className="text-xs font-bold text-white/30 mb-3 px-2 tracking-wider">{group.section}</div>
+              <div className="space-y-1">
+                {group.links.map(link => (
+                  <button 
+                    key={link.id}
+                    onClick={() => setActiveAdminTab(link.id)}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors text-sm ${activeAdminTab === link.id ? 'bg-white/10 text-white font-semibold' : 'text-white/60 hover:bg-white/5 hover:text-white'}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className={activeAdminTab === link.id ? "" : "opacity-70"}>{link.icon}</span>
+                      {link.label}
+                    </div>
+                    {link.badge && link.badge > 0 && (
+                      <span className="bg-[#ef4444] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">{link.badge}</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="p-4 border-t border-white/10 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center font-bold text-sm text-white">
+            M
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-semibold truncate">Mehmet Karaca</div>
+            <div className="text-xs text-white/40 truncate">Pro Plan</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Header */}
+        <header className="h-16 bg-[#0a0a0a] border-b border-white/10 flex items-center justify-between px-6 shrink-0">
+          <div className="flex items-center gap-4">
+            <h2 className="font-bold text-lg capitalize">{sidebarLinks.flatMap(g=>g.links).find(l=>l.id===activeAdminTab)?.label}</h2>
+            {activeAdminTab === 'tema' && (
+              <span className="flex items-center gap-1.5 text-xs bg-white/5 border border-white/10 px-2.5 py-1 rounded-full text-white/60">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                Canlı · {activeOrdersCount} aktif sipariş
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            <button className="p-2 hover:bg-white/5 rounded-full text-white/60 hover:text-white transition-colors">
+              <Bell size={18} />
+            </button>
+            <button className="p-2 hover:bg-white/5 rounded-full text-white/60 hover:text-white transition-colors">
+              <HelpCircle size={18} />
+            </button>
+            <button className="ml-2 px-3 py-1.5 bg-[#ef4444]/10 text-[#ef4444] rounded-lg text-sm font-semibold flex items-center gap-2 hover:bg-[#ef4444]/20 transition-colors">
+              Çıkış
+            </button>
+          </div>
+        </header>
+
+        {/* Content Area */}
+        <main className="flex-1 overflow-y-auto bg-[#050505]">
+          {activeAdminTab === "tema" && <AdminTemaQR config={config} updateConfig={updateConfig} dict={dict} />}
+          {activeAdminTab === "dashboard" && <AdminStats orders={orders} dict={dict} />}
+          {activeAdminTab === "menu" && <AdminMenuEditor />}
+          {activeAdminTab === "tables" && <AdminTables orders={orders} />}
+          {activeAdminTab === "settings" && <AdminSettings config={config} />}
+          
+          {(activeAdminTab === "preview" || activeAdminTab === "kitchen") && (
+            <div className="h-full flex items-center justify-center text-white/40">
+              Görüntülemek için alt kısımdaki Demo Navigasyonunu kullanın.
+            </div>
+          )}
+        </main>
+      </div>
+    </motion.div>
+  );
+}
+
+function AdminTemaQR({ config, updateConfig, dict }: { config: RestaurantConfig, updateConfig: (c: RestaurantConfig) => void, dict: any }) {
+  return (
+    <div className="p-6 md:p-8 max-w-6xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold mb-1">Tema & QR</h1>
+        <p className="text-white/50 text-sm">Restoranının görünümünü özelleştir, QR kodları yazdır</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Sol Kolon - Ayarlar */}
+        <div className="space-y-6">
+          
+          <div className="bg-[#141414] border border-white/10 p-6 rounded-2xl">
+            <div className="flex items-center gap-2 mb-6 text-white/80 font-semibold">
+              <Flame size={16} style={{ color: config.themeColor }} /> Renk Teması
+            </div>
+            <div className="flex gap-3 mb-8">
+              {THEME_COLORS.map(c => (
+                <button
+                  key={c.id}
+                  onClick={() => updateConfig({...config, themeColor: c.value})}
+                  className={`w-10 h-10 rounded-xl transition-all ${config.themeColor === c.value ? 'ring-2 ring-white scale-110' : 'hover:scale-105 opacity-80 hover:opacity-100'}`}
+                  style={{ backgroundColor: c.value }}
+                />
+              ))}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs text-white/50 font-semibold ml-1">Restoran Adı</label>
+              <input 
+                type="text" 
+                value={config.name}
+                onChange={e => updateConfig({...config, name: e.target.value})}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm outline-none transition-colors"
+                style={{ borderColor: config.themeColor ? `${config.themeColor}40` : '' }}
+              />
+            </div>
+          </div>
+
+          <div className="bg-[#141414] border border-white/10 p-6 rounded-2xl">
+            <div className="flex items-center gap-2 mb-6 text-white/80 font-semibold">
+              <UtensilsCrossed size={16} className="text-[#22c55e]" /> Logo
+            </div>
+            <div className="border-2 border-dashed border-white/10 rounded-xl h-32 flex flex-col items-center justify-center text-white/40 hover:bg-white/5 hover:border-white/20 transition-all cursor-pointer">
+              <Upload size={24} className="mb-2" />
+              <span className="text-sm font-semibold">Logo yüklemek için tıkla</span>
+              <span className="text-xs mt-1">PNG, SVG - Max 2 MB</span>
+            </div>
+          </div>
+
+          <div className="bg-[#141414] border border-white/10 p-6 rounded-2xl">
+            <div className="flex items-center gap-2 mb-4 text-white/80 font-semibold">
+              <div className="w-2 h-2 rounded-full bg-[#3b82f6]"></div> Public Menü URL
+            </div>
+            <div className="flex bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden">
+              <input 
+                readOnly
+                value={`https://app.ordereasypro.com/${config.name.toLowerCase().replace(/\s+/g, '')}`}
+                className="flex-1 bg-transparent px-4 py-3 text-sm text-white/60 outline-none"
+              />
+              <button className="px-4 bg-white/5 hover:bg-white/10 border-l border-white/10 text-sm font-semibold flex items-center gap-2 transition-colors">
+                <Copy size={14} /> Kopyala
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Sağ Kolon - Canlı Önizleme */}
+        <div className="bg-[#141414] border border-white/10 p-6 rounded-2xl flex flex-col">
+          <div className="flex items-center gap-2 mb-6 text-white/80 font-semibold">
+            <MonitorPlay size={16} /> Canlı Önizleme
+            <span className="ml-2 text-xs font-normal text-green-500 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"/> CANLI - Müşterinin gördüğü</span>
+          </div>
+
+          <div className="flex-1 flex items-center justify-center bg-[#0a0a0a] rounded-xl border border-white/5 p-4 overflow-hidden">
+            {/* Phone Mockup */}
+            <div className="w-[300px] h-[600px] bg-black rounded-[40px] border-[8px] border-[#222] relative overflow-hidden shadow-2xl flex flex-col">
+              {/* Notch */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#222] rounded-b-2xl z-50 flex justify-center items-end pb-1">
+                <div className="w-12 h-1.5 bg-black/50 rounded-full"></div>
+              </div>
+              
+              {/* Simulated Status Bar */}
+              <div className="h-6 w-full flex justify-between items-center px-6 text-[10px] font-bold text-white z-40 mt-1">
+                <span>9:41</span>
+                <span className="flex items-center gap-1">5G <div className="w-4 h-2 bg-white rounded-sm"></div></span>
+              </div>
+
+              {/* Injected CustomerMenu */}
+              <div className="flex-1 relative overflow-hidden bg-[#0a0a0a]">
+                <CustomerMenu dict={dict} config={config} isPreview={true} />
+              </div>
+
+              {/* Bottom Home Indicator */}
+              <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-24 h-1 bg-white/30 rounded-full z-50"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+// -------------------------------------------------------------
+// DUMMY ADMIN COMPONENTS (Other Tabs)
+// -------------------------------------------------------------
+
+function AdminStats({ orders, dict }: { orders: Order[], dict: any }) {
   const todayRevenue = orders.filter(o => o.status === "completed").reduce((acc, o) => acc + o.total, 0);
   const totalOrders = orders.filter(o => o.status === "completed").length;
   const avgOrder = totalOrders > 0 ? todayRevenue / totalOrders : 0;
   
-  // Find top item
   const itemCounts: Record<string, number> = {};
   orders.forEach(o => {
     o.items.forEach(i => { itemCounts[i.id] = (itemCounts[i.id] || 0) + i.quantity; });
@@ -493,33 +749,26 @@ function AdminDashboard({ dict, orders }: { dict: any, orders: Order[] }) {
   });
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-4 md:p-8 max-w-7xl mx-auto">
-      <header className="mb-8 flex items-center gap-4">
-        <div className="w-12 h-12 rounded-xl bg-[#3b82f6]/20 flex items-center justify-center text-[#3b82f6]">
-          <LayoutDashboard size={24} />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold">{dict.dashboard.title}</h1>
-          <p className="text-white/50 text-sm">Gerçek zamanlı metrikler</p>
-        </div>
-      </header>
+    <div className="p-6 md:p-8 max-w-6xl mx-auto space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold mb-1">Dashboard</h1>
+        <p className="text-white/50 text-sm">Gerçek zamanlı metrikler ve son siparişler</p>
+      </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: dict.dashboard.stats.orders, value: totalOrders, format: "" },
           { label: dict.dashboard.stats.revenue, value: todayRevenue, format: dict.common.currency },
           { label: dict.dashboard.stats.avg_order, value: avgOrder.toFixed(0), format: dict.common.currency },
           { label: dict.dashboard.stats.top_item, value: topItem, format: "" },
         ].map((s, i) => (
-          <div key={i} className="bg-[#141414] border border-white/10 rounded-2xl p-6">
-            <h3 className="text-white/50 text-xs md:text-sm font-semibold mb-2">{s.label}</h3>
-            <p className="text-2xl md:text-3xl font-bold text-[#3b82f6]">{s.format}{s.value}</p>
+          <div key={i} className="bg-[#141414] border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-colors">
+            <h3 className="text-white/50 text-xs font-semibold mb-2">{s.label}</h3>
+            <p className="text-2xl font-bold text-[#3b82f6]">{s.format}{s.value}</p>
           </div>
         ))}
       </div>
 
-      {/* Table */}
       <div className="bg-[#141414] border border-white/10 rounded-2xl overflow-hidden">
         <div className="p-6 border-b border-white/10">
           <h2 className="text-lg font-bold">{dict.dashboard.recent_orders}</h2>
@@ -560,6 +809,122 @@ function AdminDashboard({ dict, orders }: { dict: any, orders: Order[] }) {
           </table>
         </div>
       </div>
-    </motion.div>
+    </div>
+  );
+}
+
+function AdminMenuEditor() {
+  const dummyProducts = [
+    { name: "Mercimek Çorbası", category: "Başlangıçlar", price: 65, active: true },
+    { name: "Adana Kebap", category: "Ana Yemekler", price: 195, active: true },
+    { name: "Kola", category: "İçecekler", price: 45, active: true },
+    { name: "Künefe", category: "Tatlılar", price: 120, active: false },
+  ];
+
+  return (
+    <div className="p-6 md:p-8 max-w-6xl mx-auto space-y-6">
+      <div className="flex justify-between items-center mb-4">
+        <div>
+          <h1 className="text-2xl font-bold mb-1">Menü Editörü</h1>
+          <p className="text-white/50 text-sm">Ürünleri düzenle, fiyatları güncelle</p>
+        </div>
+        <button className="bg-white text-black px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-gray-200">
+          <Plus size={16} /> Yeni Ürün
+        </button>
+      </div>
+
+      <div className="bg-[#141414] border border-white/10 rounded-2xl overflow-hidden">
+        <table className="w-full text-left text-sm">
+          <thead className="bg-white/5 text-white/50 text-xs">
+            <tr>
+              <th className="px-6 py-4">Ürün Adı</th>
+              <th className="px-6 py-4">Kategori</th>
+              <th className="px-6 py-4">Fiyat</th>
+              <th className="px-6 py-4">Durum</th>
+              <th className="px-6 py-4 text-right">İşlem</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/10">
+            {dummyProducts.map((p, i) => (
+              <tr key={i} className="hover:bg-white/5">
+                <td className="px-6 py-4 font-semibold">{p.name}</td>
+                <td className="px-6 py-4 text-white/60">{p.category}</td>
+                <td className="px-6 py-4 font-mono">₺{p.price}</td>
+                <td className="px-6 py-4">
+                  <span className={`px-2 py-1 rounded text-xs ${p.active ? 'bg-green-500/20 text-green-500' : 'bg-white/10 text-white/40'}`}>
+                    {p.active ? 'Aktif' : 'Pasif'}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-right">
+                  <button className="p-2 text-white/40 hover:text-white"><Edit size={16}/></button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function AdminTables({ orders }: { orders: Order[] }) {
+  const activeTables = Array.from({length: 12}, (_, i) => {
+    const t = i + 1;
+    const isActive = orders.some(o => o.table === t && o.status !== 'completed');
+    return { table: t, active: isActive };
+  });
+
+  return (
+    <div className="p-6 md:p-8 max-w-6xl mx-auto space-y-6">
+      <div className="mb-4">
+        <h1 className="text-2xl font-bold mb-1">Aktif Masalar</h1>
+        <p className="text-white/50 text-sm">Masaların anlık durumu</p>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        {activeTables.map(t => (
+          <div key={t.table} className={`p-6 rounded-2xl border flex flex-col items-center justify-center gap-2 transition-all ${t.active ? 'bg-[#3b82f6]/10 border-[#3b82f6]/30 text-[#3b82f6]' : 'bg-[#141414] border-white/5 text-white/40'}`}>
+            <Users size={24} />
+            <span className="font-bold">Masa {t.table}</span>
+            <span className="text-xs">{t.active ? 'Dolu' : 'Boş'}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AdminSettings({ config }: { config: RestaurantConfig }) {
+  return (
+    <div className="p-6 md:p-8 max-w-6xl mx-auto space-y-6">
+      <div className="mb-4">
+        <h1 className="text-2xl font-bold mb-1">Ayarlar</h1>
+        <p className="text-white/50 text-sm">Sistem yapılandırması</p>
+      </div>
+
+      <div className="bg-[#141414] border border-white/10 rounded-2xl p-6 max-w-xl space-y-6">
+        <div>
+          <label className="block text-sm font-semibold mb-2">Firma Unvanı</label>
+          <input type="text" defaultValue="OrderEasy Teknoloji A.Ş." className="w-full bg-black border border-white/10 rounded-lg p-3 text-sm text-white/50" readOnly />
+        </div>
+        <div>
+          <label className="block text-sm font-semibold mb-2">Sistem Dili</label>
+          <select className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg p-3 text-sm outline-none">
+            <option>Türkçe</option>
+            <option>English</option>
+            <option>Deutsch</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-semibold mb-2">Para Birimi</label>
+          <select className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg p-3 text-sm outline-none">
+            <option>TRY (₺)</option>
+            <option>USD ($)</option>
+            <option>EUR (€)</option>
+          </select>
+        </div>
+        <button className="bg-white text-black font-bold px-6 py-3 rounded-xl hover:bg-gray-200">Ayarları Kaydet</button>
+      </div>
+    </div>
   );
 }
