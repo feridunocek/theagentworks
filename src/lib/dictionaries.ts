@@ -162,6 +162,35 @@ export type Dictionary = {
         tooltip: string;
         message: string;
     };
+    demo_hub: {
+        badge: string;
+        title_prefix: string;
+        title_highlight: string;
+        subtitle: string;
+        demos: {
+            qr_menu: { title: string; subtitle: string; description: string; };
+            emlak: { title: string; subtitle: string; description: string; };
+            restaurant: { title: string; subtitle: string; description: string; };
+        };
+        tags: { live: string; coming_soon: string; demo_link: string; };
+        cta: { text: string; button: string; };
+    };
+    demo_restaurant: {
+        common: { currency: string; close: string; };
+        menu: {
+            table_select: string; cart: string; add_to_cart: string; total: string; order_note: string; place_order: string; success_msg: string; empty_cart: string;
+            categories: { starters: string; mains: string; sides: string; drinks: string; desserts: string; };
+            items: Record<string, { name: string; desc: string }>;
+        };
+        kitchen: { title: string; new_orders: string; preparing: string; completed: string; btn_prepare: string; btn_ready: string; mins_ago: string; note: string; empty_state: string; };
+        dashboard: {
+            title: string;
+            stats: { orders: string; revenue: string; avg_order: string; top_item: string; };
+            sidebar: { dashboard: string; orders: string; menu: string; stats: string; };
+            recent_orders: string;
+            table: { id: string; table_no: string; amount: string; status: string; time: string; };
+        };
+    };
 };
 
 export const dictionaries: Record<string, Dictionary> = {
@@ -426,6 +455,67 @@ export const dictionaries: Record<string, Dictionary> = {
         floating_whatsapp: {
             tooltip: "AI Asistanımıza Sorun 🤖",
             message: "Merhaba AgentWorks, otonom sistemleriniz hakkında bilgi almak istiyorum."
+        },
+        demo_hub: {
+            badge: "Canlı Demo Merkezi",
+            title_prefix: "Sistemi görmek,",
+            title_highlight: "inanmaktan iyidir.",
+            subtitle: "Sizin için kurduğumuz sistemlerin çalışan örnekleri. Deneyin, keşfedin.",
+            demos: {
+                qr_menu: { title: "QR Dijital Menü", subtitle: "Restoran & Kafe", description: "Restoranınızın dijital menüsünü dakikalar içinde oluşturun. AI ile yemek görseli üretin, QR kod ile paylaşın." },
+                emlak: { title: "Emlak Portföy Yöneticisi", subtitle: "Emlak & Gayrimenkul", description: "Tüm mülk portföyünüzü tek ekranda yönetin. AI ile görsel ve ilan metni üretin, QR kod ile paylaşın." },
+                restaurant: { title: "Akıllı Restoran Sistemi", subtitle: "Restoran & Kafe", description: "Müşteri siparişi, mutfak ekranı ve yönetim paneli tek sistemde. Masaları yönetin, siparişleri anında mutfağa iletin." }
+            },
+            tags: { live: "Canlı", coming_soon: "Yakında eklenecek", demo_link: "Demoya Git" },
+            cta: { text: "Bu sistemlerin birini kendi işletmeniz için kurmak ister misiniz?", button: "Görüşme Planla" }
+        },
+        demo_restaurant: {
+            common: { currency: "₺", close: "Kapat" },
+            menu: {
+                table_select: "Lütfen masanızı seçin", cart: "Sepetim", add_to_cart: "Sepete Ekle", total: "Toplam", order_note: "Sipariş notu (opsiyonel)", place_order: "Siparişi Ver", success_msg: "Siparişiniz mutfağa iletildi!", empty_cart: "Sepetiniz boş",
+                categories: { starters: "Başlangıçlar", mains: "Ana Yemekler", sides: "Yan Ürünler", drinks: "İçecekler", desserts: "Tatlılar" },
+                items: {
+                    mercimek: { name: "Mercimek Çorbası", desc: "Geleneksel kırmızı mercimek çorbası, limon ile servis" },
+                    ezme: { name: "Ezme", desc: "Acılı domates ezmesi, taze yeşillikler" },
+                    humus: { name: "Humus", desc: "Tahin soslu nohut ezmesi, zeytinyağı" },
+                    sigara_boregi: { name: "Sigara Böreği (4 adet)", desc: "Çıtır yufka, beyaz peynir" },
+                    patlican_salatasi: { name: "Patlıcan Salatası", desc: "Közlenmiş patlıcan, sarımsak, nar ekşisi" },
+                    atom: { name: "Atom", desc: "Acı biber, sarımsak yoğurt, nar ekşisi" },
+                    adana: { name: "Adana Kebap", desc: "El kıyması, odun ateşinde, lavaş ekmek ile" },
+                    urfa: { name: "Urfa Kebap", desc: "Acısız el kıyması, közlenmiş domates, biber" },
+                    beyti: { name: "Beyti Sarma", desc: "Lavaş sarma, yoğurt ve tereyağlı sos" },
+                    kuzu_pirzola: { name: "Kuzu Pirzola (4 adet)", desc: "Marine edilmiş kuzu pirzola, ızgara sebze" },
+                    tavuk_kanat: { name: "Tavuk Kanat (8 adet)", desc: "Baharatlı ızgara kanat, ranch sos" },
+                    iskender: { name: "İskender", desc: "İnce döner, tereyağlı domates sos, yoğurt" },
+                    karisik_izgara: { name: "Karışık Izgara (2 kişilik)", desc: "Adana, kanat, pirzola, köfte, sebze" },
+                    kofte: { name: "Köfte (6 adet)", desc: "Kasap köftesi, ızgara ile" },
+                    pilav: { name: "Pilav", desc: "Tereyağlı pirinç pilavı" },
+                    lavas: { name: "Lavaş Ekmek", desc: "Fırın lavaş (2 adet)" },
+                    kozlenmis_biber: { name: "Közlenmiş Biber", desc: "3 adet közlenmiş sivri biber" },
+                    piyaz: { name: "Piyaz", desc: "Kuru fasulye salatası, soğan, maydanoz" },
+                    coban_salata: { name: "Çoban Salata", desc: "Domates, salatalık, soğan, maydanoz" },
+                    mevsim_salata: { name: "Mevsim Salata", desc: "Akdeniz yeşillikleri, nar ekşili sos" },
+                    ayran: { name: "Ayran", desc: "Geleneksel yayık ayran" },
+                    salgam: { name: "Şalgam", desc: "Acılı şalgam suyu" },
+                    kola: { name: "Kola / Fanta / Sprite", desc: "330ml kutu" },
+                    su: { name: "Su (0.5L)", desc: "" },
+                    cay: { name: "Çay", desc: "İnce belli bardak" },
+                    kahve: { name: "Türk Kahvesi", desc: "Orta şekerli" },
+                    limonata: { name: "Taze Limonata", desc: "Ev yapımı, nane" },
+                    kunefe: { name: "Künefe", desc: "Sıcak peynirli künefe, kaymak ile" },
+                    katmer: { name: "Katmer", desc: "Fıstıklı Gaziantep katmeri" },
+                    sutlac: { name: "Sütlaç", desc: "Fırında sütlaç" },
+                    baklava: { name: "Baklava (4 adet)", desc: "Fıstıklı ev baklavası" }
+                }
+            },
+            kitchen: { title: "Mutfak Ekranı", new_orders: "Yeni Siparişler", preparing: "Hazırlanıyor", completed: "Tamamlandı", btn_prepare: "Hazırlamaya Başla", btn_ready: "Hazır!", mins_ago: "dk önce", note: "Not", empty_state: "Henüz sipariş yok." },
+            dashboard: {
+                title: "Yönetim Paneli",
+                stats: { orders: "Bugünkü Sipariş", revenue: "Bugünkü Gelir", avg_order: "Ortalama Sepet", top_item: "En Popüler Ürün" },
+                sidebar: { dashboard: "Dashboard", orders: "Siparişler", menu: "Menü Editörü", stats: "İstatistikler" },
+                recent_orders: "Son Siparişler",
+                table: { id: "Sipariş No", table_no: "Masa", amount: "Tutar", status: "Durum", time: "Zaman" }
+            }
         }
     },
     en: {
@@ -689,6 +779,67 @@ export const dictionaries: Record<string, Dictionary> = {
         floating_whatsapp: {
             tooltip: "Ask our AI Assistant 🤖",
             message: "Hello AgentWorks, I would like to get information about your autonomous systems."
+        },
+        demo_hub: {
+            badge: "Live Demo Center",
+            title_prefix: "Seeing the system",
+            title_highlight: "is better than believing.",
+            subtitle: "Working examples of systems we built. Try and discover.",
+            demos: {
+                qr_menu: { title: "QR Digital Menu", subtitle: "Restaurant & Cafe", description: "Create your digital menu in minutes. Generate food images with AI, share with QR." },
+                emlak: { title: "Real Estate Portfolio Manager", subtitle: "Real Estate", description: "Manage your property portfolio on one screen. Generate images and ad copy with AI, share with QR." },
+                restaurant: { title: "Smart Restaurant System", subtitle: "Restaurant & Cafe", description: "Customer order, kitchen screen, and management panel in one system. Manage tables, send orders instantly to the kitchen." }
+            },
+            tags: { live: "Live", coming_soon: "Coming soon", demo_link: "Go to Demo" },
+            cta: { text: "Want to set up one of these systems for your business?", button: "Schedule a Meeting" }
+        },
+        demo_restaurant: {
+            common: { currency: "$", close: "Close" },
+            menu: {
+                table_select: "Please select your table", cart: "My Cart", add_to_cart: "Add to Cart", total: "Total", order_note: "Order note (optional)", place_order: "Place Order", success_msg: "Your order has been sent to the kitchen!", empty_cart: "Your cart is empty",
+                categories: { starters: "Starters", mains: "Main Courses", sides: "Side Dishes", drinks: "Drinks", desserts: "Desserts" },
+                items: {
+                    mercimek: { name: "Lentil Soup", desc: "Traditional red lentil soup, served with lemon" },
+                    ezme: { name: "Spicy Paste", desc: "Spicy tomato paste, fresh greens" },
+                    humus: { name: "Hummus", desc: "Mashed chickpeas with tahini sauce, olive oil" },
+                    sigara_boregi: { name: "Cheese Rolls (4 pcs)", desc: "Crispy dough rolls with feta cheese" },
+                    patlican_salatasi: { name: "Eggplant Salad", desc: "Roasted eggplant, garlic, pomegranate syrup" },
+                    atom: { name: "Atom", desc: "Hot pepper, garlic yogurt, pomegranate syrup" },
+                    adana: { name: "Adana Kebab", desc: "Hand-minced meat, wood fire, with lavash bread" },
+                    urfa: { name: "Urfa Kebab", desc: "Mild hand-minced meat, roasted tomatoes, peppers" },
+                    beyti: { name: "Beyti Wrap", desc: "Lavash wrap, yogurt and butter sauce" },
+                    kuzu_pirzola: { name: "Lamb Chops (4 pcs)", desc: "Marinated lamb chops, grilled vegetables" },
+                    tavuk_kanat: { name: "Chicken Wings (8 pcs)", desc: "Spicy grilled wings, ranch sauce" },
+                    iskender: { name: "Iskender Kebab", desc: "Thinly sliced doner, butter tomato sauce, yogurt" },
+                    karisik_izgara: { name: "Mixed Grill (For 2)", desc: "Adana, wings, chops, meatballs, vegetables" },
+                    kofte: { name: "Meatballs (6 pcs)", desc: "Butcher meatballs, grilled" },
+                    pilav: { name: "Rice Pilaf", desc: "Buttery rice pilaf" },
+                    lavas: { name: "Lavash Bread", desc: "Oven baked lavash (2 pcs)" },
+                    kozlenmis_biber: { name: "Roasted Peppers", desc: "3 roasted green peppers" },
+                    piyaz: { name: "Bean Salad", desc: "White bean salad, onion, parsley" },
+                    coban_salata: { name: "Shepherd Salad", desc: "Tomatoes, cucumbers, onions, parsley" },
+                    mevsim_salata: { name: "Seasonal Salad", desc: "Mediterranean greens, pomegranate syrup dressing" },
+                    ayran: { name: "Ayran", desc: "Traditional frothy yogurt drink" },
+                    salgam: { name: "Turnip Juice", desc: "Spicy turnip juice" },
+                    kola: { name: "Cola / Fanta / Sprite", desc: "330ml can" },
+                    su: { name: "Water (0.5L)", desc: "" },
+                    cay: { name: "Turkish Tea", desc: "Traditional glass" },
+                    kahve: { name: "Turkish Coffee", desc: "Medium sweet" },
+                    limonata: { name: "Fresh Lemonade", desc: "Homemade, with mint" },
+                    kunefe: { name: "Kunefe", desc: "Hot cheese pastry with clotted cream" },
+                    katmer: { name: "Katmer", desc: "Gaziantep pistachio pastry" },
+                    sutlac: { name: "Rice Pudding", desc: "Oven baked rice pudding" },
+                    baklava: { name: "Baklava (4 pcs)", desc: "Homemade pistachio baklava" }
+                }
+            },
+            kitchen: { title: "Kitchen Screen", new_orders: "New Orders", preparing: "Preparing", completed: "Completed", btn_prepare: "Start Preparing", btn_ready: "Ready!", mins_ago: "mins ago", note: "Note", empty_state: "No orders yet." },
+            dashboard: {
+                title: "Management Panel",
+                stats: { orders: "Today's Orders", revenue: "Today's Revenue", avg_order: "Avg. Cart Value", top_item: "Top Product" },
+                sidebar: { dashboard: "Dashboard", orders: "Orders", menu: "Menu Editor", stats: "Statistics" },
+                recent_orders: "Recent Orders",
+                table: { id: "Order ID", table_no: "Table", amount: "Amount", status: "Status", time: "Time" }
+            }
         }
     },
     de: {
@@ -952,6 +1103,67 @@ export const dictionaries: Record<string, Dictionary> = {
         floating_whatsapp: {
             tooltip: "Fragen Sie unseren KI-Assistenten 🤖",
             message: "Hallo AgentWorks, ich möchte Informationen über Ihre autonomen Systeme erhalten."
+        },
+        demo_hub: {
+            badge: "Live-Demo-Zentrum",
+            title_prefix: "Das System zu sehen,",
+            title_highlight: "ist besser als zu glauben.",
+            subtitle: "Funktionierende Beispiele von Systemen, die wir gebaut haben. Ausprobieren und entdecken.",
+            demos: {
+                qr_menu: { title: "Digitale QR-Speisekarte", subtitle: "Restaurant & Café", description: "Erstellen Sie Ihre digitale Speisekarte in wenigen Minuten. Generieren Sie Essensbilder mit KI, teilen Sie sie per QR-Code." },
+                emlak: { title: "Immobilien Portfolio Manager", subtitle: "Immobilien", description: "Verwalten Sie Ihr Immobilienportfolio auf einem Bildschirm. Generieren Sie Bilder und Anzeigentexte mit KI, teilen Sie sie per QR." },
+                restaurant: { title: "Smart Restaurant System", subtitle: "Restaurant & Café", description: "Kundenbestellung, Küchenbildschirm und Management-Panel in einem System. Verwalten Sie Tische, senden Sie Bestellungen sofort in die Küche." }
+            },
+            tags: { live: "Live", coming_soon: "Demnächst", demo_link: "Zur Demo" },
+            cta: { text: "Möchten Sie eines dieser Systeme für Ihr Unternehmen einrichten?", button: "Meeting planen" }
+        },
+        demo_restaurant: {
+            common: { currency: "€", close: "Schließen" },
+            menu: {
+                table_select: "Bitte wählen Sie Ihren Tisch", cart: "Mein Warenkorb", add_to_cart: "In den Warenkorb", total: "Gesamt", order_note: "Bestellnotiz (optional)", place_order: "Bestellung aufgeben", success_msg: "Ihre Bestellung wurde in die Küche gesendet!", empty_cart: "Ihr Warenkorb ist leer",
+                categories: { starters: "Vorspeisen", mains: "Hauptspeisen", sides: "Beilagen", drinks: "Getränke", desserts: "Desserts" },
+                items: {
+                    mercimek: { name: "Linsensuppe", desc: "Traditionelle rote Linsensuppe, serviert mit Zitrone" },
+                    ezme: { name: "Scharfe Paste", desc: "Scharfe Tomatenpaste, frische Kräuter" },
+                    humus: { name: "Hummus", desc: "Pürierte Kichererbsen mit Tahini-Sauce, Olivenöl" },
+                    sigara_boregi: { name: "Käseröllchen (4 Stk)", desc: "Knusprige Teigrollen mit Schafskäse" },
+                    patlican_salatasi: { name: "Auberginensalat", desc: "Geröstete Aubergine, Knoblauch, Granatapfelsirup" },
+                    atom: { name: "Atom", desc: "Scharfer Paprika, Knoblauchjoghurt, Granatapfelsirup" },
+                    adana: { name: "Adana Kebab", desc: "Handgehacktes Fleisch, Holzfeuer, mit Lavash-Brot" },
+                    urfa: { name: "Urfa Kebab", desc: "Mildes handgehacktes Fleisch, geröstete Tomaten, Paprika" },
+                    beyti: { name: "Beyti Wrap", desc: "Lavash Wrap, Joghurt und Buttersauce" },
+                    kuzu_pirzola: { name: "Lammkoteletts (4 Stk)", desc: "Marinierte Lammkoteletts, gegrilltes Gemüse" },
+                    tavuk_kanat: { name: "Hähnchenflügel (8 Stk)", desc: "Würzige gegrillte Flügel, Ranch-Sauce" },
+                    iskender: { name: "Iskender Kebab", desc: "Dünn geschnittener Döner, Butter-Tomaten-Sauce, Joghurt" },
+                    karisik_izgara: { name: "Gemischter Grillteller (Für 2)", desc: "Adana, Flügel, Koteletts, Frikadellen, Gemüse" },
+                    kofte: { name: "Frikadellen (6 Stk)", desc: "Metzger-Frikadellen, gegrillt" },
+                    pilav: { name: "Reispilaw", desc: "Butterreis-Pilaw" },
+                    lavas: { name: "Lavash-Brot", desc: "Im Ofen gebackenes Lavash (2 Stk)" },
+                    kozlenmis_biber: { name: "Geröstete Paprika", desc: "3 geröstete grüne Paprika" },
+                    piyaz: { name: "Bohnensalat", desc: "Weißer Bohnensalat, Zwiebeln, Petersilie" },
+                    coban_salata: { name: "Hirtensalat", desc: "Tomaten, Gurken, Zwiebeln, Petersilie" },
+                    mevsim_salata: { name: "Saisonaler Salat", desc: "Mediterrane Kräuter, Granatapfelsirup-Dressing" },
+                    ayran: { name: "Ayran", desc: "Traditionelles schaumiges Joghurtgetränk" },
+                    salgam: { name: "Rübensaft", desc: "Scharfer Rübensaft" },
+                    kola: { name: "Cola / Fanta / Sprite", desc: "330ml Dose" },
+                    su: { name: "Wasser (0.5L)", desc: "" },
+                    cay: { name: "Türkischer Tee", desc: "Traditionelles Glas" },
+                    kahve: { name: "Türkischer Kaffee", desc: "Mittelsüß" },
+                    limonata: { name: "Frische Limonade", desc: "Hausgemacht, mit Minze" },
+                    kunefe: { name: "Künefe", desc: "Heißes Käsegebäck mit Streichrahm" },
+                    katmer: { name: "Katmer", desc: "Gaziantep Pistaziengebäck" },
+                    sutlac: { name: "Milchreis", desc: "Im Ofen gebackener Milchreis" },
+                    baklava: { name: "Baklava (4 Stk)", desc: "Hausgemachtes Pistazien-Baklava" }
+                }
+            },
+            kitchen: { title: "Küchenbildschirm", new_orders: "Neue Bestellungen", preparing: "In Vorbereitung", completed: "Abgeschlossen", btn_prepare: "Zubereitung starten", btn_ready: "Fertig!", mins_ago: "Min vor", note: "Notiz", empty_state: "Noch keine Bestellungen." },
+            dashboard: {
+                title: "Management-Panel",
+                stats: { orders: "Heutige Bestellungen", revenue: "Heutiger Umsatz", avg_order: "Durchschnittl. Warenkorb", top_item: "Top Produkt" },
+                sidebar: { dashboard: "Dashboard", orders: "Bestellungen", menu: "Menü-Editor", stats: "Statistiken" },
+                recent_orders: "Letzte Bestellungen",
+                table: { id: "Bestell-ID", table_no: "Tisch", amount: "Betrag", status: "Status", time: "Zeit" }
+            }
         }
     }
 };
