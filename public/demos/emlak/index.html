@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emlak Portföy Yöneticisi</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #070d18;
+      --bg2:    #0c1526;
+      --bg3:    #121e30;
+      --bg4:    #182438;
+      --border: #1e2d44;
+      --border2:#253550;
+      --txt:    #e2e8f2;
+      --txt2:   #8899b0;
+      --txt3:   #4a5568;
+      --accent: #3b82f6;
+      --accent-h:#2563eb;
+      --green:  #22c55e;
+      --amber:  #f59e0b;
+      --red:    #ef4444;
+    }
+
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--txt); min-height: 100vh; overflow-x: hidden; }
+
+    /* HEADER */
+    .hdr { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 20px; height: 58px; display: flex; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 100; }
+    .hdr-icon { width: 34px; height: 34px; background: linear-gradient(135deg,#3b82f6,#8b5cf6); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+    .hdr-title { font-size: 14px; font-weight: 600; }
+    .hdr-agent { margin-left: auto; font-size: 12px; color: var(--txt2); display: flex; align-items: center; gap: 7px; }
+    .hdr-agent strong { color: var(--txt); }
+    .dot-live { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    /* LAYOUT */
+    .main { display: flex; height: calc(100vh - 58px); }
+
+    /* LEFT PANEL */
+    .lp { width: 50%; border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+
+    /* TABS */
+    .tabs { display: flex; background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 14px; }
+    .tab { padding: 13px 14px; font-size: 12px; font-weight: 500; color: var(--txt2); cursor: pointer; border-bottom: 2px solid transparent; transition: all .2s; display: flex; align-items: center; gap: 5px; }
+    .tab:hover { color: var(--txt); }
+    .tab.on { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* SCROLLABLE */
+    .pc { flex: 1; overflow-y: auto; padding: 14px; }
+    .pc::-webkit-scrollbar { width: 3px; }
+    .pc::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+    /* SECTION */
+    .sec { background: var(--bg3); border: 1px solid var(--border); border-radius: 11px; padding: 14px; margin-bottom: 10px; }
+    .sec-t { font-size: 10px; font-weight: 700; color: var(--txt3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+
+    /* FORM */
+    .fr { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 9px; }
+    .fr.full { grid-template-columns: 1fr; }
+    .fg { display: flex; flex-direction: column; gap: 3px; }
+    label { font-size: 11px; color: var(--txt2); font-weight: 500; }
+    input, select, textarea { background: var(--bg4); border: 1px solid var(--border); border-radius: 7px; padding: 7px 9px; font-size: 12px; color: var(--txt); font-family: inherit; outline: none; transition: border-color .2s; width: 100%; }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+    select option { background: var(--bg4); }
+    textarea { resize: vertical; min-height: 68px; }
+
+    /* BUTTONS */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 7px 13px; border-radius: 7px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; transition: all .2s; font-family: inherit; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-h); }
+    .btn-outline { background: transparent; color: var(--txt2); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--border2); color: var(--txt); }
+    .btn-danger { background: transparent; color: var(--red); border: 1px solid rgba(239,68,68,.2); }
+    .btn-danger:hover { background: rgba(239,68,68,.06); }
+    .btn-ai { background: linear-gradient(135deg,rgba(139,92,246,.12),rgba(59,130,246,.12)); color: #a78bfa; border: 1px solid rgba(139,92,246,.22); font-size: 11px; }
+    .btn-ai:hover { background: linear-gradient(135deg,rgba(139,92,246,.2),rgba(59,130,246,.2)); }
+    .btn-ai:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-sm { padding: 5px 10px; font-size: 11px; }
+    .btn-full { width: 100%; }
+
+    /* PROPERTY LIST */
+    .plist { display: flex; flex-direction: column; gap: 7px; }
+    .pitem { display: flex; align-items: center; gap: 9px; background: var(--bg4); border: 1px solid var(--border); border-radius: 9px; padding: 9px 11px; cursor: pointer; transition: all .2s; }
+    .pitem:hover { border-color: var(--border2); }
+    .pitem.on { border-color: var(--accent); background: rgba(59,130,246,.06); }
+    .pthumb { width: 44px; height: 44px; border-radius: 7px; background: var(--bg3); overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 19px; }
+    .pthumb img { width: 100%; height: 100%; object-fit: cover; }
+    .pinfo { flex: 1; min-width: 0; }
+    .pname { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pmeta { font-size: 10px; color: var(--txt2); margin-top: 2px; display: flex; align-items: center; gap: 5px; }
+    .pprice { font-size: 12px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+
+    /* BADGES */
+    .badge { display: inline-flex; align-items: center; padding: 1px 7px; border-radius: 100px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+    .b-satilik  { background: rgba(59,130,246,.14);  color: #60a5fa; }
+    .b-kiralik  { background: rgba(245,158,11,.14);  color: #fbbf24; }
+    .b-satildi  { background: rgba(34,197,94,.12);   color: #4ade80; }
+    .b-kiralandy{ background: rgba(168,85,247,.14);  color: #c084fc; }
+
+    /* FEATURES */
+    .fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+    .fcheck { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--txt2); cursor: pointer; padding: 5px 7px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg4); transition: all .15s; user-select: none; }
+    .fcheck:hover { border-color: var(--border2); }
+    .fcheck.on { border-color: rgba(59,130,246,.35); background: rgba(59,130,246,.07); color: var(--txt); }
+    .fchk-icon { width: 13px; height: 13px; border: 1px solid var(--border2); border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .fcheck.on .fchk-icon { background: var(--accent); border-color: var(--accent); }
+
+    /* THEME COLORS */
+    .tcolors { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tcol { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all .2s; }
+    .tcol.on { border-color: #fff; transform: scale(1.2); }
+
+    /* IMAGE AREA */
+    .img-area { position: relative; width: 100%; height: 110px; border-radius: 9px; border: 1px dashed var(--border2); background: var(--bg4); overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 7px; }
+    .img-area img { width: 100%; height: 100%; object-fit: cover; }
+    .img-ph { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--txt3); font-size: 11px; }
+    .img-ph svg { width: 26px; height: 26px; opacity: .35; }
+    .shimmer { position: absolute; inset: 0; background: linear-gradient(90deg,var(--bg4) 25%,var(--bg3) 50%,var(--bg4) 75%); background-size: 200% 100%; animation: shim 1.4s infinite; }
+    @keyframes shim { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    /* ADD BUTTON */
+    .add-btn { width: 100%; padding: 11px; border-radius: 9px; border: 1px dashed var(--border2); background: transparent; color: var(--txt2); font-size: 12px; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; transition: all .2s; margin-top: 7px; }
+    .add-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(59,130,246,.04); }
+
+    /* EMPTY */
+    .empty { text-align: center; padding: 28px 14px; color: var(--txt3); font-size: 12px; }
+    .empty-icon { font-size: 32px; margin-bottom: 7px; }
+
+    /* RIGHT PANEL */
+    .rp { width: 50%; display: flex; flex-direction: column; align-items: center; padding: 20px 16px; overflow-y: auto; gap: 18px; }
+    .rp::-webkit-scrollbar { width: 3px; }
+    .rp::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+    /* PHONE */
+    .phone { width: 272px; height: 548px; border-radius: 34px; border: 2px solid var(--border2); background: var(--bg3); overflow: hidden; position: relative; box-shadow: 0 22px 56px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.04); flex-shrink: 0; }
+    .notch { position: absolute; top: 9px; left: 50%; transform: translateX(-50%); width: 72px; height: 5px; background: var(--bg4); border-radius: 3px; z-index: 10; }
+    .pprev { width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; }
+    .pprev::-webkit-scrollbar { display: none; }
+
+    /* PREVIEW INTERNALS — light card */
+    .pv-img { width: 100%; height: 192px; position: relative; overflow: hidden; background: linear-gradient(135deg,#1a2540,#0f1a30); flex-shrink: 0; }
+    .pv-img img { width: 100%; height: 100%; object-fit: cover; }
+    .pv-img-ph { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 52px; }
+    .pv-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom,transparent 40%,rgba(8,12,24,.8) 100%); }
+    .pv-status { position: absolute; top: 12px; left: 12px; }
+    .pv-price-badge { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,.72); backdrop-filter: blur(8px); border-radius: 7px; padding: 4px 9px; font-size: 13px; font-weight: 700; color: #fff; }
+
+    .pv-body { background: #f8fafc; color: #1e293b; padding: 14px; }
+    .pv-title { font-size: 15px; font-weight: 700; color: #0f172a; line-height: 1.3; margin-bottom: 4px; }
+    .pv-loc { font-size: 11px; color: #64748b; display: flex; align-items: center; gap: 3px; margin-bottom: 12px; }
+    .pv-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; margin-bottom: 12px; }
+    .pv-stat { background: #f1f5f9; border-radius: 7px; padding: 7px; text-align: center; }
+    .pv-stat-v { font-size: 13px; font-weight: 700; color: #0f172a; }
+    .pv-stat-l { font-size: 9px; color: #94a3b8; margin-top: 1px; }
+    .pv-feats { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+    .pv-chip { font-size: 9px; padding: 2px 7px; border-radius: 100px; background: #f1f5f9; color: #475569; font-weight: 500; }
+    .pv-desc { font-size: 10px; color: #64748b; line-height: 1.6; margin-bottom: 12px; }
+    .pv-agent { border-top: 1px solid #e2e8f0; padding-top: 12px; }
+    .pv-ag-row { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+    .pv-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .pv-ag-name { font-size: 12px; font-weight: 600; color: #0f172a; }
+    .pv-ag-agency { font-size: 10px; color: #94a3b8; }
+    .pv-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+    .pv-btn-call { padding: 9px; border-radius: 9px; font-size: 11px; font-weight: 600; color: #fff; display: flex; align-items: center; justify-content: center; gap: 4px; }
+    .pv-btn-wa { padding: 9px; border-radius: 9px; font-size: 11px; font-weight: 600; background: #22c55e; color: #fff; display: flex; align-items: center; justify-content: center; gap: 4px; }
+
+    /* QR SECTION */
+    .qr-sec { width: 272px; background: var(--bg3); border: 1px solid var(--border); border-radius: 14px; padding: 18px; text-align: center; flex-shrink: 0; }
+    .qr-t { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+    .qr-sub { font-size: 11px; color: var(--txt2); margin-bottom: 14px; }
+    #qr-canvas { border-radius: 10px; margin-bottom: 11px; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(70px); background: var(--bg3); border: 1px solid var(--border2); border-radius: 9px; padding: 9px 18px; font-size: 12px; color: var(--txt); z-index: 1000; transition: transform .3s; white-space: nowrap; }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up { animation: fadeUp .22s ease forwards; }
+    @keyframes imgIn { from{opacity:0} to{opacity:1} }
+    .img-in { animation: imgIn .35s ease forwards; }
+    @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+    @media(max-width:860px) {
+      .main { flex-direction: column; height: auto; }
+      .lp, .rp { width: 100%; }
+      .lp { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="hdr-icon">🏠</div>
+    <span class="hdr-title">Emlak Portföy Yöneticisi</span>
+    <div class="hdr-agent">
+      <div class="dot-live"></div>
+      <span>Agent: <strong id="hdr-agent"></strong></span>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- LEFT PANEL -->
+    <div class="lp">
+      <div class="tabs">
+        <div class="tab on" data-tab="props" onclick="switchTab('props')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          İlanlar
+        </div>
+        <div class="tab" data-tab="agent" onclick="switchTab('agent')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Agent Profili
+        </div>
+      </div>
+
+      <!-- PROPERTIES TAB -->
+      <div id="tab-props" class="pc">
+        <div class="sec">
+          <div class="sec-t">İlan Listesi</div>
+          <div class="plist" id="plist"></div>
+          <button class="add-btn" onclick="addProp()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Yeni İlan Ekle
+          </button>
+        </div>
+
+        <!-- EDITOR -->
+        <div id="editor" style="display:none;" class="fade-up">
+
+          <div class="sec">
+            <div class="sec-t">Görsel</div>
+            <div class="img-area" id="img-area">
+              <div class="img-ph" id="img-ph">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span>Görsel yok</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:7px;margin-bottom:8px;">
+              <button class="btn btn-ai btn-sm" style="flex:1" id="btn-gen-img" onclick="genImage()">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                AI ile Görsel Üret
+              </button>
+              <button class="btn btn-outline btn-sm" id="btn-clr-img" onclick="clearImg()" style="display:none;">Sil</button>
+            </div>
+            <div class="fg">
+              <label>Görsel URL</label>
+              <input type="url" id="prop-img-url" placeholder="https://..." oninput="onImgUrl(this.value)">
+            </div>
+          </div>
+
+          <div class="sec">
+            <div class="sec-t">Temel Bilgiler</div>
+            <div class="fr full">
+              <div class="fg">
+                <label>İlan Başlığı</label>
+                <input type="text" id="p-title" placeholder="3+1 Deniz Manzaralı Daire" oninput="upd('title',this.value)">
+              </div>
+            </div>
+            <div class="fr">
+              <div class="fg">
+                <label>Tip</label>
+                <select id="p-type" onchange="upd('type',this.value)">
+                  <option>Daire</option><option>Villa</option><option>Müstakil</option><option>Arsa</option><option>İş Yeri</option>
+                </select>
+              </div>
+              <div class="fg">
+                <label>Durum</label>
+                <select id="p-status" onchange="upd('status',this.value)">
+                  <option>Satılık</option><option>Kiralık</option><option>Satıldı</option><option>Kiralandı</option>
+                </select>
+              </div>
+            </div>
+            <div class="fr">
+              <div class="fg">
+                <label>Fiyat</label>
+                <input type="number" id="p-price" placeholder="2500000" oninput="upd('price',this.value)">
+              </div>
+              <div class="fg">
+                <label>Para Birimi</label>
+                <select id="p-cur" onchange="upd('currency',this.value)">
+                  <option value="TL">₺ TL</option><option value="USD">$ USD</option><option value="EUR">€ EUR</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="sec">
+            <div class="sec-t">Konum & Detaylar</div>
+            <div class="fr full">
+              <div class="fg">
+                <label>Konum</label>
+                <input type="text" id="p-loc" placeholder="Kadıköy, İstanbul" oninput="upd('location',this.value)">
+              </div>
+            </div>
+            <div class="fr">
+              <div class="fg">
+                <label>Alan (m²)</label>
+                <input type="number" id="p-sqm" placeholder="120" oninput="upd('sqm',this.value)">
+              </div>
+              <div class="fg">
+                <label>Oda Sayısı</label>
+                <select id="p-rooms" onchange="upd('rooms',this.value)">
+                  <option>Stüdyo</option><option>1+1</option><option>2+1</option><option>3+1</option><option>4+1</option><option>5+1</option><option>6+</option><option>—</option>
+                </select>
+              </div>
+            </div>
+            <div class="fr">
+              <div class="fg">
+                <label>Kat</label>
+                <input type="text" id="p-floor" placeholder="3/8" oninput="upd('floor',this.value)">
+              </div>
+              <div class="fg">
+                <label>Bina Yaşı</label>
+                <input type="text" id="p-age" placeholder="5 yıl" oninput="upd('age',this.value)">
+              </div>
+            </div>
+          </div>
+
+          <div class="sec">
+            <div class="sec-t">Özellikler</div>
+            <div class="fgrid" id="fgrid"></div>
+          </div>
+
+          <div class="sec">
+            <div class="sec-t">Açıklama</div>
+            <textarea id="p-desc" rows="4" placeholder="Mülk hakkında detaylı açıklama..." oninput="upd('description',this.value)"></textarea>
+            <button class="btn btn-ai btn-sm btn-full" id="btn-gen-desc" onclick="genDesc()" style="margin-top:8px;">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              AI ile Açıklama Oluştur
+            </button>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <button class="btn btn-danger btn-full" onclick="delProp()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+              İlanı Sil
+            </button>
+          </div>
+        </div>
+
+        <div id="no-sel" class="empty">
+          <div class="empty-icon">🏠</div>
+          Düzenlemek için bir ilan seçin<br>ya da yeni ilan ekleyin
+        </div>
+      </div>
+
+      <!-- AGENT TAB -->
+      <div id="tab-agent" class="pc" style="display:none;">
+        <div class="sec">
+          <div class="sec-t">Agent Bilgileri</div>
+          <div class="fr full"><div class="fg"><label>Ad Soyad</label><input type="text" id="ag-name" oninput="updAg('name',this.value)"></div></div>
+          <div class="fr full"><div class="fg"><label>Ajans / Firma</label><input type="text" id="ag-agency" oninput="updAg('agency',this.value)"></div></div>
+          <div class="fr">
+            <div class="fg"><label>Telefon</label><input type="tel" id="ag-phone" oninput="updAg('phone',this.value)"></div>
+            <div class="fg"><label>WhatsApp</label><input type="tel" id="ag-wa" placeholder="905321234567" oninput="updAg('whatsapp',this.value)"></div>
+          </div>
+        </div>
+        <div class="sec">
+          <div class="sec-t">Kart Tema Rengi</div>
+          <p style="font-size:11px;color:var(--txt2);margin-bottom:10px;">İlan kartındaki renk vurgusunu belirler.</p>
+          <div class="tcolors" id="tcolors"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="rp">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="pprev" id="pprev"></div>
+      </div>
+
+      <div class="qr-sec">
+        <div class="qr-t">QR Kod</div>
+        <div class="qr-sub">Müşteriniz okutunca ilanı görsün</div>
+        <canvas id="qr-canvas" width="180" height="180"></canvas>
+        <button class="btn btn-primary btn-full" onclick="dlQR()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          QR Kodu İndir
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // =============================================
+    // FAL AI ANAHTARI — https://fal.ai/dashboard/keys
+    // =============================================
+    const FAL_KEY = '3c2e1b25-c850-4e3f-9822-9f88b6807a63:e41f4d159c6dd129bb795b812e27d75a';
+
+    const THEMES = [
+      { name:"Mavi",    color:"#3b82f6" },
+      { name:"Lacivert",color:"#1e40af" },
+      { name:"Yeşil",   color:"#16a34a" },
+      { name:"Amber",   color:"#d97706" },
+      { name:"Kırmızı", color:"#dc2626" },
+      { name:"Mor",     color:"#7c3aed" },
+    ];
+
+    const FEATS = [
+      "Asansör","Otopark","Balkon","Eşyalı",
+      "Havuz","Güvenlik","Bahçe","Deniz Manzarası",
+      "Site İçi","Merkezi Isıtma","Kapalı Mutfak","Doğalgaz",
+    ];
+
+    const EMOJI = { "Daire":"🏢","Villa":"🏡","Müstakil":"🏠","Arsa":"🌿","İş Yeri":"🏪" };
+
+    const STATUS_CLS = {
+      "Satılık":"b-satilik","Kiralık":"b-kiralik",
+      "Satıldı":"b-satildi","Kiralandı":"b-kiralandy"
+    };
+
+    const DEFAULT = {
+      agent: { name:"Ayşe Kaya", agency:"Kaya Gayrimenkul", phone:"+90 532 000 11 22", whatsapp:"905320001122", themeColor:"#3b82f6" },
+      properties: [
+        { id:1, title:"Boğaz Manzaralı Lüks 3+1", type:"Daire", status:"Satılık", price:8500000, currency:"TL", location:"Beşiktaş, İstanbul", sqm:165, rooms:"3+1", floor:"12/18", age:"3 yıl", features:["Asansör","Otopark","Balkon","Güvenlik","Site İçi","Deniz Manzarası"], image:null, description:"Boğaz manzaralı prestijli rezidansta lüks daire. Açık plan salon, ebeveyn banyosu, akıllı ev sistemi ile üst düzey yaşam." },
+        { id:2, title:"Bahçeli Villa — Özel Havuzlu", type:"Villa", status:"Satılık", price:18000000, currency:"TL", location:"Zekeriyaköy, İstanbul", sqm:420, rooms:"5+1", floor:"Müstakil", age:"7 yıl", features:["Havuz","Bahçe","Otopark","Güvenlik","Site İçi"], image:null, description:"Zekeriyaköy'de orman içinde konumlu özel havuzlu villa. 4 araçlık kapalı garaj ve geniş arazisiyle lüks yaşam." },
+        { id:3, title:"Merkezi 2+1 Kiralık Daire", type:"Daire", status:"Kiralık", price:35000, currency:"TL", location:"Kadıköy, İstanbul", sqm:90, rooms:"2+1", floor:"4/6", age:"10 yıl", features:["Asansör","Balkon","Doğalgaz","Kapalı Mutfak"], image:null, description:"Kadıköy'ün kalbinde, tüm ulaşıma yürüme mesafesinde ferah 2+1 daire. Bakımlı bina, sessiz sokak." },
+        { id:4, title:"İmar İzinli Yatırım Arsası", type:"Arsa", status:"Satılık", price:4200000, currency:"TL", location:"Silivri, İstanbul", sqm:1200, rooms:"—", floor:"—", age:"—", features:["Deniz Manzarası"], image:null, description:"Silivri sahiline 300m mesafede imar izinli yatırımlık arsa. Yapı ruhsatı hazır, projeye uygun." },
+      ],
+      selectedId: 1
+    };
+
+    let S;
+
+    function loadS() {
+      try { const s = localStorage.getItem('emlak-v1'); S = s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT)); }
+      catch(e) { S = JSON.parse(JSON.stringify(DEFAULT)); }
+    }
+
+    function saveS() { localStorage.setItem('emlak-v1', JSON.stringify(S)); }
+
+    // TABS
+    function switchTab(t) {
+      document.querySelectorAll('.tab').forEach(el => el.classList.toggle('on', el.dataset.tab === t));
+      document.getElementById('tab-props').style.display  = t === 'props' ? 'block' : 'none';
+      document.getElementById('tab-agent').style.display  = t === 'agent' ? 'block' : 'none';
+    }
+
+    // AGENT
+    function updAg(f, v) {
+      S.agent[f] = v;
+      saveS();
+      document.getElementById('hdr-agent').textContent = S.agent.name || '—';
+      renderPreview();
+      if (f === 'themeColor') renderThemes();
+    }
+
+    function renderAgForm() {
+      document.getElementById('ag-name').value   = S.agent.name;
+      document.getElementById('ag-agency').value = S.agent.agency;
+      document.getElementById('ag-phone').value  = S.agent.phone;
+      document.getElementById('ag-wa').value     = S.agent.whatsapp;
+    }
+
+    function renderThemes() {
+      document.getElementById('tcolors').innerHTML = THEMES.map(t =>
+        `<div class="tcol ${S.agent.themeColor===t.color?'on':''}" style="background:${t.color}" title="${t.name}" onclick="updAg('themeColor','${t.color}')"></div>`
+      ).join('');
+    }
+
+    // PROPERTIES
+    function sel() { return S.properties.find(p => p.id === S.selectedId) || null; }
+
+    function selectProp(id) {
+      S.selectedId = id;
+      saveS();
+      renderList();
+      renderEditor();
+      renderPreview();
+      genQR();
+    }
+
+    function addProp() {
+      const id = Date.now();
+      S.properties.push({ id, title:"Yeni İlan", type:"Daire", status:"Satılık", price:0, currency:"TL", location:"", sqm:0, rooms:"3+1", floor:"", age:"", features:[], image:null, description:"" });
+      S.selectedId = id;
+      saveS();
+      renderList();
+      renderEditor();
+      renderPreview();
+      genQR();
+    }
+
+    function delProp() {
+      if (S.properties.length <= 1) { toast("En az 1 ilan kalmalı."); return; }
+      S.properties = S.properties.filter(p => p.id !== S.selectedId);
+      S.selectedId = S.properties[0].id;
+      saveS();
+      renderList();
+      renderEditor();
+      renderPreview();
+      genQR();
+    }
+
+    function upd(f, v) {
+      const p = sel(); if (!p) return;
+      p[f] = (f==='price'||f==='sqm') ? (Number(v)||0) : v;
+      saveS();
+      renderList();
+      renderPreview();
+    }
+
+    function toggleFeat(f) {
+      const p = sel(); if (!p) return;
+      const i = p.features.indexOf(f);
+      if (i > -1) p.features.splice(i,1); else p.features.push(f);
+      saveS();
+      renderFeats();
+      renderPreview();
+    }
+
+    function onImgUrl(v) {
+      const p = sel(); if (!p) return;
+      p.image = v || null;
+      saveS();
+      renderImgArea();
+      renderPreview();
+      renderList();
+    }
+
+    function clearImg() {
+      const p = sel(); if (!p) return;
+      p.image = null;
+      document.getElementById('prop-img-url').value = '';
+      saveS();
+      renderImgArea();
+      renderPreview();
+      renderList();
+    }
+
+    // LIST
+    function renderList() {
+      const c = document.getElementById('plist');
+      c.innerHTML = S.properties.map(p => {
+        const em = EMOJI[p.type] || '🏠';
+        const pr = fmtPrice(p.price, p.currency);
+        return `<div class="pitem ${p.id===S.selectedId?'on':''}" onclick="selectProp(${p.id})">
+          <div class="pthumb">${p.image ? `<img src="${esc(p.image)}" onerror="this.style.display='none'">` : em}</div>
+          <div class="pinfo">
+            <div class="pname">${esc(p.title)}</div>
+            <div class="pmeta"><span class="badge ${STATUS_CLS[p.status]||''}">${p.status}</span>${p.location?` · ${esc(p.location)}`:''}
+          </div>
+          </div>
+          <div class="pprice">${pr}</div>
+        </div>`;
+      }).join('');
+    }
+
+    // EDITOR
+    function renderEditor() {
+      const p = sel();
+      document.getElementById('editor').style.display  = p ? 'block' : 'none';
+      document.getElementById('no-sel').style.display  = p ? 'none'  : 'block';
+      if (!p) return;
+      document.getElementById('p-title').value  = p.title;
+      document.getElementById('p-type').value   = p.type;
+      document.getElementById('p-status').value = p.status;
+      document.getElementById('p-price').value  = p.price || '';
+      document.getElementById('p-cur').value    = p.currency;
+      document.getElementById('p-loc').value    = p.location;
+      document.getElementById('p-sqm').value    = p.sqm || '';
+      document.getElementById('p-rooms').value  = p.rooms;
+      document.getElementById('p-floor').value  = p.floor;
+      document.getElementById('p-age').value    = p.age;
+      document.getElementById('p-desc').value   = p.description;
+      document.getElementById('prop-img-url').value = p.image || '';
+      renderImgArea();
+      renderFeats();
+    }
+
+    function renderImgArea() {
+      const p = sel();
+      const area = document.getElementById('img-area');
+      const ph   = document.getElementById('img-ph');
+      const clr  = document.getElementById('btn-clr-img');
+      const old  = area.querySelector('img');
+      if (old) old.remove();
+      if (p && p.image) {
+        ph.style.display = 'none';
+        clr.style.display = '';
+        const img = document.createElement('img');
+        img.src = p.image;
+        img.className = 'img-in';
+        img.onerror = () => { ph.style.display = 'flex'; img.remove(); };
+        area.appendChild(img);
+      } else {
+        ph.style.display = 'flex';
+        clr.style.display = 'none';
+      }
+    }
+
+    function renderFeats() {
+      const p = sel();
+      document.getElementById('fgrid').innerHTML = FEATS.map(f => {
+        const on = p && p.features.includes(f);
+        return `<label class="fcheck ${on?'on':''}" onclick="toggleFeat('${f}')">
+          <div class="fchk-icon">${on?`<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>`:''}</div>
+          ${f}
+        </label>`;
+      }).join('');
+    }
+
+    // PREVIEW
+    function renderPreview() {
+      const p = sel();
+      const pv = document.getElementById('pprev');
+      const { agent: ag } = S;
+      const accent = ag.themeColor;
+
+      if (!p) { pv.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#4a5568;font-size:12px;">İlan seçilmedi</div>`; return; }
+
+      const initials = ag.name.trim().split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
+      const priceStr = fmtPrice(p.price, p.currency);
+      const imgHtml = p.image
+        ? `<img src="${esc(p.image)}" onerror="this.style.display='none'">`
+        : `<div class="pv-img-ph">${EMOJI[p.type]||'🏠'}</div>`;
+
+      const stats = [
+        p.sqm  ? {v: p.sqm + ' m²', l: 'Alan'} : null,
+        p.rooms && p.rooms !== '—' ? {v: p.rooms, l: 'Oda'} : null,
+        p.floor && p.floor !== '—' ? {v: p.floor, l: 'Kat'} : null,
+      ].filter(Boolean).slice(0,3);
+
+      pv.innerHTML = `
+        <div style="padding-top:20px;">
+          <div class="pv-img">
+            ${imgHtml}
+            <div class="pv-overlay"></div>
+            <div class="pv-status"><span class="badge ${STATUS_CLS[p.status]||''}" style="font-size:8px;">${p.status}</span></div>
+            ${p.price ? `<div class="pv-price-badge">${priceStr}</div>` : ''}
+          </div>
+          <div class="pv-body">
+            <div class="pv-title">${esc(p.title)}</div>
+            ${p.location ? `<div class="pv-loc"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${esc(p.location)}</div>` : ''}
+            ${stats.length ? `<div class="pv-stats">${stats.map(s=>`<div class="pv-stat"><div class="pv-stat-v">${s.v}</div><div class="pv-stat-l">${s.l}</div></div>`).join('')}</div>` : ''}
+            ${p.features.length ? `<div class="pv-feats">${p.features.slice(0,6).map(f=>`<span class="pv-chip">${f}</span>`).join('')}</div>` : ''}
+            ${p.description ? `<div class="pv-desc">${esc(p.description)}</div>` : ''}
+            <div class="pv-agent">
+              <div class="pv-ag-row">
+                <div class="pv-avatar" style="background:${accent}">${initials}</div>
+                <div>
+                  <div class="pv-ag-name">${esc(ag.name)}</div>
+                  <div class="pv-ag-agency">${esc(ag.agency)}</div>
+                </div>
+              </div>
+              <div class="pv-btns">
+                <div class="pv-btn-call" style="background:${accent}">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.43 12.5 19.79 19.79 0 01.36 3.83 2 2 0 012.34 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 9.91a16 16 0 006.16 6.16l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                  Ara
+                </div>
+                <div class="pv-btn-wa">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  WhatsApp
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    // AI IMAGE
+    async function genImage() {
+      const p = sel(); if (!p) return;
+      if (!FAL_KEY || FAL_KEY.startsWith('YOUR')) { toast("Fal AI anahtarı girilmemiş."); return; }
+
+      const btn = document.getElementById('btn-gen-img');
+      btn.disabled = true;
+      btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg> Üretiliyor...`;
+
+      const area = document.getElementById('img-area');
+      document.getElementById('img-ph').style.display = 'none';
+      const sk = document.createElement('div'); sk.className = 'shimmer'; area.appendChild(sk);
+
+      const prompts = {
+        "Daire":    `modern luxury apartment interior, bright open living room, city view windows, Istanbul real estate photography, professional, 4k`,
+        "Villa":    `luxury villa exterior with swimming pool, modern architecture, lush garden, Istanbul suburbs, real estate photography, sunny`,
+        "Müstakil": `detached house exterior, garden, Turkish residential architecture, real estate photography, afternoon light`,
+        "Arsa":     `empty land plot with sea view, Turkish countryside, aerial perspective, natural, real estate`,
+        "İş Yeri":  `modern bright office space interior, professional workspace, Istanbul commercial real estate photography`,
+      };
+
+      try {
+        const res = await fetch("https://fal.run/fal-ai/nano-banana-2", {
+          method: "POST",
+          headers: { "Authorization": `Key ${FAL_KEY}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: prompts[p.type] || prompts["Daire"], image_size: "square_hd" })
+        });
+        const data = await res.json();
+        const url = data?.images?.[0]?.url;
+        sk.remove();
+        if (url) {
+          p.image = url;
+          document.getElementById('prop-img-url').value = url;
+          saveS();
+          renderImgArea();
+          renderPreview();
+          renderList();
+          toast("Görsel oluşturuldu!");
+        } else throw new Error();
+      } catch {
+        sk.remove();
+        document.getElementById('img-ph').style.display = 'flex';
+        toast("Görsel oluşturulamadı. Tekrar deneyin.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> AI ile Görsel Üret`;
+      }
+    }
+
+    // AI DESCRIPTION (template-based demo)
+    async function genDesc() {
+      const p = sel(); if (!p) return;
+      const btn = document.getElementById('btn-gen-desc');
+      btn.disabled = true; btn.textContent = 'Yazılıyor...';
+
+      const feats = p.features.slice(0,3).join(', ');
+      const loc = p.location || 'Merkezi konumda';
+
+      const tpls = {
+        "Daire": [
+          `${loc}'de ${p.rooms} geniş daire. ${p.sqm ? p.sqm + ' m² ' : ''}ferah kullanım alanı${feats ? ', ' + feats : ''} özellikleriyle konforlu bir yaşam sunuyor.`,
+          `${p.title} — ${loc} kalbinde, ${p.floor && p.floor !== '—' ? p.floor + '. kattaki ' : ''}${p.rooms} daire.${p.features.includes('Balkon') ? ' Güneş alan balkon' : ''}${p.features.includes('Deniz Manzarası') ? ' ve deniz manzarasıyla' : ''} öne çıkıyor.`,
+        ],
+        "Villa": [
+          `${loc}'da ${p.sqm ? p.sqm + ' m² ' : ''}özel villa.${p.features.includes('Havuz') ? ' Özel yüzme havuzu,' : ''}${p.features.includes('Bahçe') ? ' bakımlı bahçe' : ''} ile lüks yaşam standardı.`,
+        ],
+        "Müstakil": [
+          `${loc}'da müstakil ev. ${p.sqm ? p.sqm + ' m² ' : ''}brüt kullanım alanı, özel bahçe ve garaj imkânı ile aile yaşamına uygun.`,
+        ],
+        "Arsa": [
+          `${loc}'da ${p.sqm ? p.sqm + ' m² ' : ''}imar izinli arsa.${p.features.includes('Deniz Manzarası') ? ' Deniz manzaralı konumu ile' : ''} yatırım ve proje geliştirme için ideal fırsat.`,
+        ],
+        "İş Yeri": [
+          `${loc}'da ${p.sqm ? p.sqm + ' m² ' : ''}${p.status.toLowerCase()} iş yeri. ${feats ? feats + ' özellikleriyle ' : ''}profesyonel iş ortamına hazır.`,
+        ],
+      };
+
+      const opts = tpls[p.type] || tpls["Daire"];
+      await new Promise(r => setTimeout(r, 700));
+      const desc = opts[Math.floor(Math.random() * opts.length)];
+
+      p.description = desc;
+      document.getElementById('p-desc').value = desc;
+      saveS(); renderPreview();
+
+      btn.disabled = false;
+      btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> AI ile Açıklama Oluştur`;
+      toast("Açıklama oluşturuldu!");
+    }
+
+    // QR
+    function genQR() {
+      const cv = document.getElementById('qr-canvas');
+      const ctx = cv.getContext('2d');
+      const sz = 180, grid = 21, cell = sz / grid;
+      const p = sel();
+      const seed = hashStr((p ? p.title + p.location : '') + S.agent.name);
+
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, sz, sz);
+
+      let r = seed;
+      for (let row = 0; row < grid; row++) {
+        for (let col = 0; col < grid; col++) {
+          if (inFinder(row, col, grid)) continue;
+          r = lcg(r);
+          if (r % 2 === 0) { ctx.fillStyle = '#0f172a'; ctx.fillRect(col*cell, row*cell, cell-.5, cell-.5); }
+        }
+      }
+
+      drawFinder(ctx, 0, 0, cell);
+      drawFinder(ctx, (grid-7)*cell, 0, cell);
+      drawFinder(ctx, 0, (grid-7)*cell, cell);
+
+      for (let i = 8; i < grid-8; i++) {
+        ctx.fillStyle = i%2===0 ? '#0f172a' : '#fff';
+        ctx.fillRect(i*cell, 6*cell, cell, cell);
+        ctx.fillRect(6*cell, i*cell, cell, cell);
+      }
+    }
+
+    function drawFinder(ctx, x, y, c) {
+      ctx.fillStyle = '#0f172a'; ctx.fillRect(x,       y,       c*7, c*7);
+      ctx.fillStyle = '#fff';    ctx.fillRect(x+c,     y+c,     c*5, c*5);
+      ctx.fillStyle = '#0f172a'; ctx.fillRect(x+c*2,   y+c*2,   c*3, c*3);
+    }
+
+    function inFinder(r, c, g) {
+      return (r<8&&c<8) || (r<8&&c>=g-8) || (r>=g-8&&c<8);
+    }
+
+    function hashStr(s) { let h=5381; for(let i=0;i<s.length;i++) h=((h<<5)+h)^s.charCodeAt(i); return Math.abs(h); }
+    function lcg(s) { return (s*1664525+1013904223)&0xffffffff; }
+
+    function dlQR() {
+      const cv = document.getElementById('qr-canvas');
+      const p = sel();
+      const name = (p ? p.title : 'ilan').replace(/[^a-zA-Z0-9ğüşıöçĞÜŞİÖÇ]/g,'-');
+      const a = document.createElement('a');
+      a.download = `qr-${name}.png`;
+      a.href = cv.toDataURL('image/png');
+      a.click();
+      toast("QR kod indirildi!");
+    }
+
+    // HELPERS
+    function fmtPrice(price, cur='TL') {
+      if (!price) return '—';
+      const s = {TL:'₺',USD:'$',EUR:'€'}[cur]||'₺';
+      if (price>=1000000) return s+(price/1000000).toFixed(1).replace('.0','')+'M';
+      if (price>=1000)    return s+(price/1000).toFixed(0)+'K';
+      return s+price.toLocaleString('tr-TR');
+    }
+
+    function esc(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    let toastTmr;
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg; el.classList.add('show');
+      clearTimeout(toastTmr);
+      toastTmr = setTimeout(() => el.classList.remove('show'), 2400);
+    }
+
+    // INIT
+    function init() {
+      loadS();
+      renderAgForm();
+      renderThemes();
+      renderList();
+      renderEditor();
+      renderPreview();
+      genQR();
+      document.getElementById('hdr-agent').textContent = S.agent.name || '—';
+    }
+
+    init();
+  </script>
+</body>
+</html>

@@ -14,10 +14,21 @@ const DEMOS = [
     accentBorder: "rgba(245,158,11,0.2)",
     live: true,
   },
+  {
+    slug: "emlak",
+    emoji: "🏠",
+    title: "Emlak Portföy Yöneticisi",
+    subtitle: "Emlak & Gayrimenkul",
+    description: "Tüm mülk portföyünüzü tek ekranda yönetin. AI ile görsel ve ilan metni üretin, QR kod ile paylaşın.",
+    tags: ["Fal AI", "QR Kod", "localStorage"],
+    accent: "#3b82f6",
+    accentBg: "rgba(59,130,246,0.08)",
+    accentBorder: "rgba(59,130,246,0.2)",
+    live: true,
+  },
 ];
 
 const COMING_SOON = [
-  { emoji: "🤖", title: "Yakında", subtitle: "Yeni demo ekleniyor...", accent: "#6b7280" },
   { emoji: "🤖", title: "Yakında", subtitle: "Yeni demo ekleniyor...", accent: "#6b7280" },
   { emoji: "🤖", title: "Yakında", subtitle: "Yeni demo ekleniyor...", accent: "#6b7280" },
 ];
