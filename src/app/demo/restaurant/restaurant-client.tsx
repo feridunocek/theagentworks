@@ -8,7 +8,7 @@ import {
   Settings, QrCode, List, Users, Bell, HelpCircle, LogOut, Upload, Copy, Edit,
   UtensilsCrossed, MonitorPlay, TrendingUp, Download, Search, Trash2, Camera
 } from "lucide-react";
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, BarChart, Bar, Cell } from "recharts";
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, BarChart, Bar, Cell, CartesianGrid } from "recharts";
 
 type OrderItem = {
   id: string;
@@ -1081,8 +1081,8 @@ function AdminMenuEditor() {
                   <label className="text-xs text-white/50 font-semibold ml-1 block mb-1">Kategori</label>
                   <select 
                     value={selectedProduct.category}
-                    readOnly
-                    className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-sm outline-none appearance-none"
+                    disabled
+                    className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-sm outline-none appearance-none opacity-70 cursor-not-allowed"
                   >
                     <option value="başlangıç">Başlangıç</option>
                     <option value="ana yemek">Ana Yemek</option>
