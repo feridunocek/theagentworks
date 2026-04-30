@@ -41,6 +41,10 @@ export function Header() {
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+    if (pathname.startsWith('/demo')) {
+        return null;
+    }
+
     return (
         <header
             className={cn(
