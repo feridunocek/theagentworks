@@ -51,7 +51,7 @@ export function Footer() {
 
                     {/* Copyright Left */}
                     <div className="text-[12px] text-[#999] uppercase tracking-wide font-medium text-center md:text-left">
-                        &copy; 2026 {dict.footer.credit_prefix} <a href="https://kheironstand.com/" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--color-neon-purple)] hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.5)] transition-all">KHEİRONSTAND</a> {dict.footer.credit_suffix}
+                        &copy; 2026 {dict.footer.credit_prefix} <a href="https://ocekdigital.com/" target="_blank" rel="noopener" lang="en" className="hover:text-[var(--color-neon-purple)] hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.5)] transition-all">OCEK DIGITAL</a> {dict.footer.credit_suffix}
                     </div>
 
                     {/* Legal Links Right */}
